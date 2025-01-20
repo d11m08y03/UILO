@@ -1,0 +1,46 @@
+Data in excel
+	- Company Name
+	- Stamp (Gold, Silver, etc) 
+	- Who will represent the company
+	- What faculty will they target
+
+Share excel sheet
+
+<Input>
+Company -> Meenakshi -> Excel Sheet (Company Data) -> Ashley -> DB & QR Code
+
+<Mobile App> 
+Scan QR code -> Presence / Goods Distribution
+
+<Draw>
+<DB> 
+	-> For each stand (Gold, Silver, Bronze)
+	-> Reset the lot
+
+<Showcase companies (Website)> / Try to put details
+
+Priorities (Deadlines)
+	- Lucky Draw - Monday the 25th Jan
+	- Mobile App - Wednesday the 29th Jan
+	- Showcase Company Website - Wednesday the 29th Jan
+
+Possible Additional Features / Arrangements
+	- Sentry around company cars (Parking wise)
+	- Assign a student for each company
+	- Task list for each student
+		-> Roles assigned to each organisor
+		-> A list of students for each role (wifi, animator, parking)
+
+
+Mobile Flutter
+	- Ranesh
+	- Steeven
+	- Zakariyya
+
+Backend
+	- Zakariyya
+
+Frontend
+	- Suhail
+	- Maybe
+		- Siva
