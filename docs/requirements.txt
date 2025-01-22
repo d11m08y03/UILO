@@ -20,7 +20,7 @@ Scan QR code -> Presence / Goods Distribution
 <Showcase companies (Website)> / Try to put details
 
 Priorities (Deadlines)
-	- Lucky Draw - Monday the 25th Jan
+	- Lucky Draw - Monday the 29th Jan
 	- Mobile App - Wednesday the 29th Jan
 	- Showcase Company Website - Wednesday the 29th Jan
 
@@ -44,3 +44,10 @@ Frontend
 	- Suhail
 	- Maybe
 		- Siva
+
+22 Jan 2025
+
+Lucky Draw
+	- Ability to choose what tier goes first
+	- List companies according to what tier they were in
+	- Generate everyone concurrently
