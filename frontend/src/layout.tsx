@@ -27,7 +27,7 @@ const Header: React.FC = (): JSX.Element => {
   }
 
   return (
-    <header className="flex h-10 shrink-0 items-center gap-2 border-b px-4 w-full mb-5">
+    <header className="flex h-10 shrink-0 items-center gap-2 border-b px-4 w-full ">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem className="hidden md:block">
@@ -51,7 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
   return (
     <>
       <Header />
-      <main className="container">{children}</main>
+      <main className="">{children}</main>
     </>
   );
 };
