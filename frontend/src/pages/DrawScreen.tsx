@@ -87,12 +87,12 @@ export default function DrawScreen() {
         className="black-screen bg-black w-full h-[100vh] absolute z-50"
         style={{ opacity: 1 }}
       ></div>
-      <Box className="w-full h-[12vh] bg-secondary">
+      <Box className="w-full h-[12vh] bg-white">
         <span className="z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-white to-gray-600 bg-clip-text text-center text-4xl md:text-6xl font-semibold leading-none text-transparent dark:from-white dark:to-black flex justify-center pt-6 md:pt-3 lg:pt-5 title">
           Company Draw
         </span>
       </Box>
-      <Box className="bg-secondary w-full h-[88vh]">
+      <Box className="bg-white w-full h-[88vh]">
         <div className="relative flex items-center justify-center">
           <button 
             onClick={handlePrevious}
