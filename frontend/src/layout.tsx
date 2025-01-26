@@ -51,7 +51,7 @@ const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
   return (
     <>
       <Header />
-      <main className="container">{children}</main>
+      <main className="container max-w-6xl mx-auto">{children}</main>
     </>
   );
 };
