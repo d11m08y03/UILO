@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/button";
+import logo from "../assets/images/UILO_logo.png"
+import CompanyCard from "@/components/CompanyCard";
 import {
   Card,
   CardContent,
@@ -81,7 +83,7 @@ const TimeLine = () => {
         </div>
         <div className="mt-3 sm:pe-8">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            End Of Event
+            End Of Event 
           </h3>
           <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
             04:00 pm
@@ -98,15 +100,20 @@ const TimeLine = () => {
 const Hero = () => {
   return (
     <div>
-      <p className="text-5xl font-bold">2025 Industrial Recruitment</p>
-      <p className="mt-3">
+      <div className="flex items-center justify-between">
+         <p className="text-5xl font-bold">2025 Industrial Recruitment</p>
+        <img className="h-12 ml-4" src={logo} alt="Logo" />
+      </div>
+     
+      <p className="mt-6">
         The career fair offers students a chance to explore career paths,
         connect with employers, and learn about various industries. It provides
         networking opportunities for internships and jobs, along with insights
         into the job market. Attending is a proactive step toward building a
         successful professional future.
       </p>
-      <div className="flex space-x-3 mt-3">
+      
+      <div className="flex space-x-3 mt-6">
         <Button>
           <Building /> Companies
         </Button>
@@ -122,8 +129,8 @@ const Hero = () => {
 const EventSchedule = () => {
   return (
     <div>
-      <div className="flex justify-between">
-        <p className="text-3xl font-bold mb-3">Event Schedule</p>
+      <div className="flex justify-between ">
+        <p className="text-3xl font-bold mb-5">Event Schedule</p>
         <CalendarDays />
       </div>
       <Tabs defaultValue="account" className="">
@@ -132,7 +139,7 @@ const EventSchedule = () => {
           <TabsTrigger value="password">Day 2</TabsTrigger>
         </TabsList>
         <TabsContent value="account">
-          <Card>
+          <Card className="">
             <CardHeader>
               <CardTitle className="flex space-x-5">
                 <p className="text-lg">5th February 2025</p>
@@ -162,71 +169,35 @@ const EventSchedule = () => {
 
 const ParticipatingCompanies = () => {
   return (
-    <div>
-      <div className="flex justify-between">
-        <p className="text-3xl font-bold mb-3">Participating Companies</p>
+    <div className="">
+      <div className="flex justify-between ">
+        <p className="text-3xl font-bold mb-5">Participating Companies</p>
         <Building2 />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardContent>
-            <p className="font-bold flex text-lg justify-center pt-3">Accenture</p>
-            <div className="flex justify-center items-center p-0">
-              <img src={accentureLogo} className="w-[200px] h-auto" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-8">
+        {companies.map((company, index) => (
+          <CompanyCard
+            key={index}
+            name={company.name}
+            logo={company.logo} field={[]}          >
+            <div className="flex space-x-3">
+              {company.field.map((field, idx) => (
+                <Badge key={idx} className="text-xs mt-10">{field}</Badge>
+              ))}
             </div>
-          </CardContent>
-          <CardFooter>
-            <div className="flex justify-between">
-              <div className="flex justify-start space-x-3 mb-3">
-                <Badge variant="secondary">Tech</Badge>
-                <Badge variant="secondary">Consulting</Badge>
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardContent>
-            <p className="font-bold flex text-lg justify-center pt-3">Accenture</p>
-            <div className="flex justify-center items-center p-0">
-              <img src={accentureLogo} className="w-[200px] h-auto" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <div className="flex justify-between">
-              <div className="flex justify-start space-x-3 mb-3">
-                <Badge variant="secondary">Tech</Badge>
-                <Badge variant="secondary">Consulting</Badge>
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
-        <Card>
-          <CardContent>
-            <p className="font-bold flex text-lg justify-center pt-3">Accenture</p>
-            <div className="flex justify-center items-center p-0">
-              <img src={accentureLogo} className="w-[200px] h-auto" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <div className="flex justify-between">
-              <div className="flex justify-start space-x-3 mb-3">
-                <Badge variant="secondary">Tech</Badge>
-                <Badge variant="secondary">Consulting</Badge>
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
+          </CompanyCard>
+        ))}
       </div>
     </div>
   );
 };
 
+
 const Floormap = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <p className="text-3xl font-bold mb-3">Floor Map</p>
+        <p className="text-3xl font-bold mb-5">Floor Map</p>
         <CalendarDays />
       </div>
       <img src={powaSetup} alt="Powa setup" className="w-full" />
@@ -238,14 +209,17 @@ const Gallery = () => {
   return (
     <div>
       <div className="flex justify-between">
-        <p className="text-3xl font-bold mb-3">Gallery</p>
+        <p className="text-3xl font-bold mb-5">Gallery</p>
         <Camera />
       </div>
 
       <div>
         <Carousel>
           <CarouselContent>
-            <CarouselItem>
+            <CarouselItem className="flex space-x-3 justify-center">
+              <img src={photo1} />
+              <img src={photo1} />
+              <img src={photo1} />
               <img src={photo1} />
             </CarouselItem>
             <CarouselItem>
@@ -284,18 +258,53 @@ const Test = () => {
   return (
     <div>
       <Hero />
-      <Separator className="mt-5 mb-5" />
+      <Separator className="mt-8 mb-8" />
       <EventSchedule />
-      <Separator className="mt-5 mb-5" />
+      <Separator className="mt-8 mb-8" />
       <ParticipatingCompanies />
-      <Separator className="mt-5 mb-5" />
+      <Separator className="mt-8 mb-8" />
       <Floormap />
-      <Separator className="mt-5 mb-5" />
+      <Separator className="mt-8 mb-8" />
       <Gallery />
-      <Separator className="mt-5 mb-5" />
+      <Separator className="mt-8 mb-8" />
       <Contact />
     </div>
   );
 };
 
 export default Test;
+
+const companies = [
+  { name: "Mauritius Union Assurance (MUA)", field: ["Insurance", "Finance"], logo: logo },
+  { name: "SICOM", field: ["Insurance"], logo: accentureLogo },
+  { name: "VISTRA", field: ["Corporate Services"], logo: accentureLogo },
+  { name: "Aspen Global Incorporated", field: ["Pharmaceuticals"], logo: accentureLogo },
+  { name: "RAPP INDIAN OCEAN", field: ["Marketing"], logo: accentureLogo },
+  { name: "Aberdeen Operations Ltd", field: ["Finance"], logo: accentureLogo },
+  { name: "IQ EQ", field: ["Corporate Services"], logo: accentureLogo },
+  { name: "Bolt Talent", field: ["Recruitment"], logo: accentureLogo },
+  { name: "Axis", field: ["Corporate Services", "Finance"], logo: accentureLogo },
+  { name: "BDO Solutions", field: ["Accounting"], logo: accentureLogo },
+  { name: "Business at Work (BAW)", field: ["Consulting"], logo: accentureLogo },
+  { name: "Spoon Consulting Limited", field: ["IT Consulting"], logo: accentureLogo },
+  { name: "Accenture", field: ["IT Consulting"], logo: accentureLogo },
+  { name: "2Cana Solutions", field: ["Software Development"], logo: accentureLogo },
+  { name: "BOURBON OFFSHORE GREENMAR", field: ["Maritime Services"], logo: accentureLogo },
+  { name: "IPCS", field: ["Consulting"], logo: accentureLogo },
+  { name: "KPMG", field: ["Accounting", "Consulting"], logo: accentureLogo },
+  { name: "Deloitte", field: ["Accounting", "Consulting"], logo: accentureLogo},
+  { name: "TRIDENT TRUST COMPANY LIMITED", field: ["Trust Services"], logo: accentureLogo },
+  { name: "Rogers Capital", field: ["Finance", "Consulting"], logo: accentureLogo},
+  { name: "Currimjee Jeewanjee Ltd", field: ["Conglomerate", "Finance"], logo: accentureLogo },
+  { name: "CIEL TEXTILE", field: ["Textiles"], logo: accentureLogo},
+  { name: "Comfort EasyFront", field: ["Consumer Goods"], logo: accentureLogo},
+  { name: "FRCI", field: ["IT Services"], logo: accentureLogo},
+  { name: "AVIPRO", field: ["Agriculture"], logo: accentureLogo },
+  { name: "DTOS", field: ["Corporate Services"], logo: accentureLogo },
+  { name: "Checkout", field: ["Payments", "Finance"], logo: accentureLogo},
+  { name: "Information Technology ELCA Ltd", field: ["IT Services"], logo: accentureLogo },
+  { name: "HR CAPITALS LIMITED", field: ["Recruitment"], logo: accentureLogo },
+  { name: "DayForce (Mauritius) Ltd", field: ["Software Solutions"], logo: accentureLogo },
+  { name: "HFM Markets", field: ["Finance"], logo: accentureLogo },
+  { name: "ARUP (Mauritius) Ltd", field: ["Engineering"], logo: accentureLogo }
+];
