@@ -1,107 +1,220 @@
-import { Separator } from "@/components/ui/separator";
-import logo from "../assets/images/UILO_logo.png";
 import { Button } from "@/components/ui/button";
-import { ScheduleTab } from "@/components/ScheduleTab";
+import { MapPin, Phone, Mail, Camera } from "lucide-react";
 import CompanyCard from "@/components/CompanyCard";
-import accenture from "../assets/images/Accenture-Logo.png";
-import dayforce from "../assets/images/Dayforce.webp"
+import picture1 from "../assets/images/gallery/Gallery1.jpg";
+import picture2 from "../assets/images/gallery/Gallery2.jpg";
+import picture3 from "../assets/images/gallery/Gallery3.jpg";
+import picture4 from "../assets/images/gallery/Gallery4.jpg";
+import picture5 from "../assets/images/gallery/Gallery13.jpg";
+import picture6 from "../assets/images/gallery/Gallery6.jpg";
+import picture7 from "../assets/images/gallery/Gallery7.jpg";
+import picture8 from "../assets/images/gallery/Gallery8.jpg";
+import picture9 from "../assets/images/gallery/Gallery9.jpg";
+import picture10 from "../assets/images/gallery/Gallery10.jpg";
+import picture11 from "../assets/images/gallery/Gallery14.jpg";
+import picture12 from "../assets/images/gallery/Gallery12.jpg";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Building, Building2, CalendarDays, Map } from "lucide-react";
+import companies from "@/lib/companies";
+
+import logo from "../assets/images/UILO_logo.png";
 import powaSetup from "../assets/images/powa_setup.jpg";
-import { GalleryCarousel } from "@/components/GalleryCarousel";
+import { Badge } from "@/components/ui/badge";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-interface Company {
-  id: number;
-  logo: string;
-  name: string;
-  description: string;
-  detailsLink: string;
-}
+const images = [
+  picture1,
+  picture2,
+  picture11,
+  picture3,
+  picture4,
+  picture5,
+  picture6,
+  picture7,
+  picture8,
+  picture9,
+  picture10,
+  picture12,
+];
 
-interface CompanyListingProps {
-  companies: Company[];
-}
+const TimeLine = () => {
+  return (
+    <ol className="items-center sm:flex">
+      <li className="relative mb-6 sm:mb-0">
+        <div className="flex items-center">
+          <div className="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+            <svg
+              className="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+            </svg>
+          </div>
+          <div className="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
+        </div>
+        <div className="mt-3 sm:pe-8">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            Start Of Event
+          </h3>
+          <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+            09:00 am
+          </time>
+          <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+            Get started with dozens of web components and interactive elements.
+          </p>
+        </div>
+      </li>
+      <li className="relative mb-6 sm:mb-0">
+        <div className="flex items-center">
+          <div className="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+            <svg
+              className="w-2.5 h-2.5 text-blue-800 dark:text-blue-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+            </svg>
+          </div>
+          <div className="hidden sm:flex w-full bg-gray-200 h-0.5 dark:bg-gray-700"></div>
+        </div>
+        <div className="mt-3 sm:pe-8">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            End Of Event
+          </h3>
+          <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
+            04:00 pm
+          </time>
+          <p className="text-base font-normal text-gray-500 dark:text-gray-400">
+            Get started with dozens of web components and interactive elements.
+          </p>
+        </div>
+      </li>
+    </ol>
+  );
+};
 
 const Hero = () => {
   return (
-    <div className="flex flex-col lg:h-screen text-center h-[148vh] md:h-[132vh]">
-      {/* Top Section */}
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-start items-center justify-start">
-        {/* Left Section */}
-        <div className="lg:w-1/2 p-6 flex flex-col items-center justify-start lg:items-start lg:text-left">
-          <img className="w-32 h-auto mb-4" src={logo} alt="Logo UILO" />
-          <h1 className="text-base font-bold mb-4 sm:text-6xl md:text-5xl lg:text-4xl">2025 Industrial Recruitment</h1>
-          <p className="lg:text-xl mb-4">5-6 February 2025</p>
-          <p className="lg:text-xl mb-4">Venue: Powa, University of Mauritius</p>
-          <div className="mt-4 space-x-4 flex justify-center lg:justify-start">
-            <Button
-              className="lg:underline text-xs sm:text-sm pl-0 pr-3 bg-blue-500 lg:bg-white text-white p-2 lg:text-black"
-              variant="ghost"
-              onClick={() => {
-                const element = document.getElementById("company-listing");
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-            >
-              View Companies
-            </Button>
-            <span>|</span>
-            <Button
-              className="bg-black lg:underline text-xs sm:text-sm pl-0 pr-0 ml-0 lg:bg-white text-white p-2 lg:text-black"
-              variant="ghost"
-              onClick={() => {
-                const element = document.getElementById("floor-map");
-                if (element) {
-                  element.scrollIntoView({ behavior: "smooth" });
-                }
-              }}
-            >
-              Go to floor Map
-            </Button>
-          </div>
-        </div>
-
-
-        <div className="lg:w-1/2 bg-white">
-          <ScheduleTab />
-        </div>
+    <div>
+      <div className="flex items-center justify-between">
+        <p className="lg:text-6xl font-bold md:text-4xl">
+          2025 Industrial Recruitment
+        </p>
+        <img className="lg:h-28 ml-4 h-12 md:h-28" src={logo} alt="Logo" />
       </div>
 
-  
-      <div className="lg:bg-gray-50 p-6 mt-18 lg:ml-20 lg:border-2 lg:border-blue-200 lg:rounded-lg lg:mt-36 mt-32">
-        <h2 className="text-3xl font-bold mb-4">About This Event</h2>
-        <p className="text-lg text-gray-700 leading-relaxed">
-          The career fair provides students with a valuable opportunity to explore potential career paths, connect with employers, and gather information about various industries. It serves as a platform for students to network, seek internship or job opportunities, and gain insights into the current job market. The event typically features a diverse range of companies and organizations eager to engage with students and discuss potential career prospects. Attending the career fair is a proactive step toward building a successful and fulfilling professional future.
-        </p>
+      <p className="mt-6">
+        The career fair offers students a chance to explore career paths,
+        connect with employers, and learn about various industries. It provides
+        networking opportunities for internships and jobs, along with insights
+        into the job market. Attending is a proactive step toward building a
+        successful professional future.
+      </p>
+
+      <div className="flex space-x-3 mt-6">
+        <Button>
+          <Building /> Companies
+        </Button>
+
+        <Button>
+          <Map /> Floor Map
+        </Button>
       </div>
     </div>
   );
 };
 
-const CompanyListing = ({ companies }: CompanyListingProps) => {
+const EventSchedule = () => {
   return (
-    <div id="company-listing">
-      <div className="w-full flex justify-center items-center lg:ml-24">
-        <h1 className="text-base text-xl font-bold text-center sm:text-2xl md:text-3xl mt-44">
-          Meet the participating organizations
-        </h1>
+    <div>
+      <div className="flex justify-between ">
+        <p className="text-3xl font-bold mb-5">Event Schedule</p>
+        <CalendarDays />
       </div>
-      <div className="flex flex-wrap justify-center gap-6 lg:pl-32">
-        {companies.map((company) => (
-          <CompanyCard key={company.id} company={company} />
+      <Tabs defaultValue="account" className="">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="account">Day 1</TabsTrigger>
+          <TabsTrigger value="password">Day 2</TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">
+          <Card className="">
+            <CardHeader>
+              <CardTitle className="flex space-x-5">
+                <p className="text-lg">5th February 2025</p>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TimeLine />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value="password">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex space-x-5">
+                <p className="text-lg">6th February 2025</p>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <TimeLine />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+const ParticipatingCompanies = () => {
+  return (
+    <div className="">
+      <div className="flex justify-between ">
+        <p className="text-3xl font-bold mb-5">Participating Companies</p>
+        <Building2 />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {companies.map((company, index) => (
+          <CompanyCard
+            key={index}
+            name={company.name}
+            logo={company.logo}
+            field={[]}
+          >
+            <div className="flex space-x-3">
+              {company.field.map((field, idx) => (
+                <Badge key={idx} className="text-xs mt-10">
+                  {field}
+                </Badge>
+              ))}
+            </div>
+          </CompanyCard>
         ))}
       </div>
     </div>
   );
 };
 
-const FloorMap = () => {
+const Floormap = () => {
   return (
-    <div className="flex flex-col items-center justify-center text-center lg:mt-16" id="floor-map">
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6 mt-8 lg:ml-32">
-  Floor Arrangement
-</h1>
-
-      <img src={powaSetup} alt="Powa setup" className="w-full lg:pl-32 mt-8 lg:mb-8" />
+    <div>
+      <div className="flex justify-between">
+        <p className="text-3xl font-bold mb-5">Floor Map</p>
+        <CalendarDays />
+      </div>
+      <img src={powaSetup} alt="Powa setup" className="w-full" />
     </div>
   );
 };
@@ -109,110 +222,107 @@ const FloorMap = () => {
 const Gallery = () => {
   return (
     <div>
-      <div className="lg:ml-40">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-4">
-          Gallery
-        </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-center text-gray-600 mb-8">
-          Check our gallery from recent events
-        </h2>
+      <div className="flex justify-between mb-5">
+        <p className="text-3xl font-bold">Gallery</p>
+        <Camera />
       </div>
-  
-      <div className="mt-[-200px]">
-        <GalleryCarousel />
+      <Carousel opts={{ align: "start" }} className="">
+        <CarouselContent>
+          {images.map((image, index) => (
+            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1">
+                <Card>
+                  <CardContent className="flex aspect-square items-center justify-center p-6">
+                    <img
+                      src={image}
+                      alt={`carousel-image-${index + 1}`}
+                      className="w-full h-full object-cover rounded-md"
+                    />
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
+  );
+};
+
+const Contact: React.FC = () => {
+  return (
+    <div>
+      <div className="flex justify-between">
+        <p className="text-3xl font-bold mb-5">Contact Us</p>
+        <CalendarDays />
+      </div>
+
+      {/* Contact Details */}
+      <div className="flex flex-col lg:flex-row justify-around items-center bg-gray-100 p-6 rounded-2xl shadow-md space-y-6 lg:space-y-0">
+        {/* Location */}
+        <div className="flex items-center space-x-4">
+          <MapPin className="text-blue-600 w-6 h-6" />
+          <div>
+            <h3 className="font-semibold text-lg">Location</h3>
+            <p className="text-gray-600">
+              Ground Floor Ex-CPDL Building, University of Mauritius
+            </p>
+          </div>
+        </div>
+        <div className="hidden lg:block border-l border-gray-300 h-16"></div>
+
+        {/* Phone */}
+        <div className="flex items-center space-x-4">
+          <Phone className="text-green-600 w-6 h-6" />
+          <div>
+            <h3 className="font-semibold text-lg">Phone</h3>
+            {/* Use tel: for phone numbers */}
+            <a
+              href="tel:+2304037644"
+              className="text-gray-600 hover:text-green-600"
+            >
+              +230 403 7644
+            </a>
+          </div>
+        </div>
+        <div className="hidden lg:block border-l border-gray-300 h-16"></div>
+
+        {/* Email */}
+        <div className="flex items-center space-x-4">
+          <Mail className="text-red-600 w-6 h-6" />
+          <div>
+            <h3 className="font-semibold text-lg">Email</h3>
+            {/* Use mailto: for email */}
+            <a
+              href="mailto:info.uilo@uom.ac.mu"
+              className="text-gray-600 hover:text-red-600"
+            >
+              info.uilo@uom.ac.mu
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-
-
 const Home = () => {
-  
-  const companies = [
-    {
-      id: 1,
-      logo: accenture,
-      name: "Accenture",
-      description: "Software engineering",
-      detailsLink: "#", 
-    },
-    {
-      id: 2,
-      logo: accenture,
-      name: "Company 2",
-      description: "Consulting",
-      detailsLink: "#", 
-    },
-    {
-      id: 3,
-      logo: accenture,
-      name: "Company 3",
-      description: "Design & Development",
-      detailsLink: "#", 
-    },
-    {
-      id: 4,
-      logo: accenture,
-      name: "Company 4",
-      description: "Marketing & Sales",
-      detailsLink: "#", 
-    },
-    {
-      id: 5,
-      logo: dayforce,
-      name: "Company 5",
-      description: "Human Resources",
-      detailsLink: "#", 
-    },
-    {
-      id: 6,
-      logo: accenture,
-      name: "Company 6",
-      description: "Finance & Accounting",
-      detailsLink: "#", 
-    },
-    {
-      id: 7,
-      logo: accenture,
-      name: "Company 7",
-      description: "Customer Support",
-      detailsLink: "#", 
-    },
-    {
-      id: 8,
-      logo: accenture,
-      name: "Company 8",
-      description: "Healthcare & Pharma",
-      detailsLink: "#",
-    },
-    {
-      id: 9,
-      logo: accenture,
-      name: "Company 9",
-      description: "Education & Training",
-      detailsLink: "#", 
-    },
-    {
-      id: 10,
-      logo: accenture,
-      name: "Company 10",
-      description: "Technology & Innovation",
-      detailsLink: "#",
-    },
-  ];
-
   return (
-    <div className="container max-w-6xl mx-auto">
+    <div>
       <Hero />
-      <div className="mt-8 lg:mt-0">
-        <CompanyListing companies={companies} />
-      </div>
-      {/* <Separator className="mb-5 mt-5" /> */}
-      <FloorMap />
-      {/* <Separator className="mb-5 mt-5" /> */}
+      <Separator className="mt-8 mb-8" />
+      <EventSchedule />
+      <Separator className="mt-8 mb-8" />
+      <ParticipatingCompanies />
+      <Separator className="mt-8 mb-8" />
+      <Floormap />
+      <Separator className="mt-8 mb-8" />
       <Gallery />
-      {/* <Separator className="mb-5 mt-5" /> */}
+      <Separator className="mt-8 mb-8" />
+      <Contact />
+      <Separator className="mt-8 mb-8" />
     </div>
   );
 };
