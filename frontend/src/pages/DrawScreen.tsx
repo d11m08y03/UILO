@@ -72,14 +72,14 @@ export default function DrawScreen() {
     });
   }, []);
 
-//   useEffect(() => {
-//     gsap.from(".title", {
-//       opacity: 0,
-//       duration: 1,
-//       y: 100,
-//       ease: "power4.out",
-//     });
-//   }, []);
+  // useEffect(() => {
+  //   gsap.from(".title", {
+  //     opacity: 0,
+  //     duration: 1,
+  //     y: 100,
+  //     ease: "power4.out",
+  //   });
+  // }, []);
 
   return (
     <>
@@ -88,7 +88,7 @@ export default function DrawScreen() {
         style={{ opacity: 1 }}
       ></div>
       <Box className="w-full h-[12vh] bg-white">
-        <span className="z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-white to-gray-600 bg-clip-text text-center text-4xl md:text-6xl font-semibold leading-none text-transparent dark:from-white dark:to-black flex justify-center pt-6 md:pt-3 lg:pt-5 title">
+        <span className="z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-gray-800 to-gray-600 bg-clip-text text-center text-4xl md:text-6xl font-semibold leading-none text-transparent dark:from-white dark:to-black flex justify-center pt-6 md:pt-3 lg:pt-5 title">
           Company Draw
         </span>
       </Box>

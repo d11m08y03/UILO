@@ -56,11 +56,13 @@ function TierTable({
         <Card className="w-full rounded-xl border-sm border-gray-100 shadow-md bg-background">
           <CardHeader>
             <div className="flex flex-row items-center">
-              <img
+              {/* <img
                 src={company.image}
                 alt={company.name}
                 className="w-12 h-10 object-contain mr-4 rounded-full"
-              />
+              /> */}
+              {/* <div className="flex items-center justify-center text-center rounded-full w-12 h-12 bg-gray-400 font-bold text-white text-sm p-5 mr-2" >{company.name}</div> */}
+
               <CardTitle className="text-2xl flex-grow-0 font-regular text-gray-700">
                 {company.name}
               </CardTitle>

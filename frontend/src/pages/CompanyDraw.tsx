@@ -109,7 +109,7 @@ export default function CompanyDraw() {
   return (
     <div className="flex h-[100vh] w-full items-center justify-center" style={{ opacity: 0 }}>
       <div className="relative flex h-[100vh] w-full flex-col items-center justify-center overflow-hidden bg-background">
-        <span className="mt-[45vh] z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-300 bg-clip-text text-center text-3xl md:text-7xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
+        <span className="mt-[45vh] z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-800 bg-clip-text text-center text-3xl md:text-7xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
           Company Draw
         </span>
         <span className="z-30 mt-2 pointer-events-none font-thin text-sm md:text-base text-black">
@@ -122,12 +122,13 @@ export default function CompanyDraw() {
         <div className="mt-64 absolute inset-0 z-0 flex h-full w-full items-center justify-center">
           <OrbitingCircles iconSize={iconSize} radius={radius} speed={speed} path={false}>
             {companiesData.companies.map((company) => (
-              <img 
-                key={company.company_id}
-                src={company.image} 
-                alt={company.name}
-                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-              />
+              // <img 
+              //   key={company.company_id}
+              //   src={company.image} 
+              //   alt={company.name}
+              //   style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              // />
+              <div className="flex items-center justify-center text-center rounded-full w-[150px] h-[150px] bg-gray-400 border-2 border-gray-800 font-bold text-white text-lg p-5" key={company.company_id} >{company.name}</div>
             ))}
           </OrbitingCircles>
         </div>
