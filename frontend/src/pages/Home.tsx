@@ -19,6 +19,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Building, Building2, CalendarDays, Map } from "lucide-react";
 import companies from "@/lib/companies";
 
+
+
 import logo from "../assets/images/UILO_logo.png";
 import powaSetup from "../assets/images/powa_setup.jpg";
 import { Badge } from "@/components/ui/badge";
@@ -109,6 +111,9 @@ const TimeLine = () => {
   );
 };
 
+import { Link } from 'react-scroll'; 
+
+
 const Hero = () => {
   return (
     <div>
@@ -128,17 +133,25 @@ const Hero = () => {
       </p>
 
       <div className="flex space-x-3 mt-6">
-        <Button>
-          <Building /> Companies
-        </Button>
+        {/* Scroll to Participating Companies */}
+        <Link to="participating-companies" smooth={true} duration={500}>
+          <Button>
+            <Building /> Companies
+          </Button>
+        </Link>
 
-        <Button>
-          <Map /> Floor Map
-        </Button>
+        {/* Scroll to Floor Map */}
+        <Link to="floor-map" smooth={true} duration={500}>
+          <Button>
+            <Map /> Floor Map
+          </Button>
+        </Link>
       </div>
     </div>
   );
 };
+
+
 
 const EventSchedule = () => {
   return (
@@ -183,8 +196,8 @@ const EventSchedule = () => {
 
 const ParticipatingCompanies = () => {
   return (
-    <div className="">
-      <div className="flex justify-between ">
+    <div id="participating-companies"> {/* Add id here */}
+      <div className="flex justify-between">
         <p className="text-3xl font-bold mb-5">Participating Companies</p>
         <Building2 />
       </div>
@@ -212,7 +225,7 @@ const ParticipatingCompanies = () => {
 
 const Floormap = () => {
   return (
-    <div>
+    <div id="floor-map">
       <div className="flex justify-between">
         <p className="text-3xl font-bold mb-5">Floor Map</p>
         <CalendarDays />
@@ -221,6 +234,7 @@ const Floormap = () => {
     </div>
   );
 };
+
 
 const Gallery = () => {
   return (
