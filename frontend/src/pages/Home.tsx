@@ -68,10 +68,12 @@ const TimeLine = () => {
             Start Of Event
           </h3>
           <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            09:00 am
+            08:00 am
           </time>
           <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-            Get started with dozens of web components and interactive elements.
+            The industry recruitment event kicks off today, bringing together
+            top talent and leading companies for exciting opportunities and
+            connections.
           </p>
         </div>
       </li>
@@ -98,7 +100,8 @@ const TimeLine = () => {
             04:00 pm
           </time>
           <p className="text-base font-normal text-gray-500 dark:text-gray-400">
-            Get started with dozens of web components and interactive elements.
+            As the industry recruitment event draws to a close, the stage is set
+            for new partnerships and exciting career paths to unfold.
           </p>
         </div>
       </li>
@@ -310,7 +313,7 @@ const Contact: React.FC = () => {
 
 const Home = () => {
   return (
-    <div>
+    <div className="container sm:max-w-xl mx-auto max-w-xs lg:max-w-4xl md:max-w-2xl xl:max-w-6xl">
       <Hero />
       <Separator className="mt-8 mb-8" />
       <EventSchedule />
