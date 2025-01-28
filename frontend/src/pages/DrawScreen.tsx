@@ -1,201 +1,100 @@
-import React, { useEffect, useState } from "react";
-import { gsap } from "gsap";
-import { Button } from "@/components/ui/button";
-import TierTable from "@/components/TierTable";
+import React from "react";
+import CustomButton from "@/components/CustomButton";
+import { useNavigate } from "react-router-dom";
 import companiesData from "../data/dummycompanies.json";
-import confetti from "canvas-confetti";
+import dayjs from "dayjs";
+import { useState } from "react";
 
-export default function DrawScreen() {
-  const [currentTier, setCurrentTier] = React.useState(0); // 0: Bronze, 1: Silver, 2: Gold
-  const [isLoading, setIsLoading] = useState(false);
-  const [sortByTime, setSortByTime] = useState(true);
+function DrawScreen() {
+  const [tierStyles, setTierStyles] = useState({
+    Bronze: {
+      otherStyles:
+        "bg-gradient-to-br from-[#DAA520] to-[#831704] bg-clip-text text-transparent",
+      radius: 600,
+      bubbleStyle: "bg-gradient-to-br from-[#DAA520] to-[#831704]",
+      doubleBubble: true,
+    },
+    Silver: {
+      otherStyles:
+        "bg-gradient-to-br from-[#C7C9CB] to-[#848B98] bg-clip-text text-transparent",
+      radius: 500,
+      bubbleStyle: "bg-gradient-to-br from-[#C7C9CB] to-[#848B98]",
+      doubleBubble: false,
+    },
+    Gold: {
+      otherStyles:
+        "bg-gradient-to-br from-[#a28834] to-[#D4AF37] bg-clip-text text-transparent",
+      radius: 540,
+      bubbleStyle: "bg-gradient-to-br from-[#f9f295] to-[#B88A44]",
+      doubleBubble: false,
+    },
+  });
 
-  const handlePrevious = () => {
-    setCurrentTier((prev) => (prev > 0 ? prev - 1 : prev));
-  };
+  const navigate = useNavigate();
+  const sortedCompanies = [...companiesData.companies].sort((a, b) => {
+    return dayjs(a.entry_at).isAfter(dayjs(b.entry_at)) ? 1 : -1;
+  });
 
-  const handleNext = () => {
-    setCurrentTier((prev) => (prev < 2 ? prev + 1 : prev));
-  };
+  const handleTierClick = (tier: keyof typeof tierStyles) => {
+    const filteredCompanies = sortedCompanies
+      .filter((company) => company.tier === tier.toLowerCase())
+      .map(({ name, image, table }) => ({
+        name,
+        image,
+        table,
+      }));
 
-  const handleShuffle = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setSortByTime((prev) => !prev);
-      setIsLoading(false);
-    }, 2000);
-    setTimeout(() => {
-      handleClick();
-    }, 1800);
-  };
-
-  const handleClick = () => {
-    const end = Date.now() + 3 * 1000; // 3 seconds
-    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
-
-    const frame = () => {
-      if (Date.now() > end) return;
-
-      confetti({
-        particleCount: 2,
-        angle: 60,
-        spread: 55,
-        startVelocity: 60,
-        origin: { x: 0, y: 0.5 },
-        colors: colors,
-      });
-      confetti({
-        particleCount: 2,
-        angle: 120,
-        spread: 55,
-        startVelocity: 60,
-        origin: { x: 1, y: 0.5 },
-        colors: colors,
-      });
-
-      requestAnimationFrame(frame);
-    };
-
-    frame();
-  };
-
-  useEffect(() => {
-    gsap.to(".black-screen", {
-      opacity: 0,
-      duration: 1,
-      ease: "power2.out",
-      onComplete: () => {
-        const screen = document.querySelector(".black-screen");
-        screen?.remove();
+    navigate("/company-draw", {
+      state: {
+        tier,
+        companies: filteredCompanies,
+        otherStyles: tierStyles[tier].otherStyles,
+        radiusSize: tierStyles[tier].radius,
+        bubbleStyle: tierStyles[tier].bubbleStyle,
+        doubleBubble: tierStyles[tier].doubleBubble,
       },
     });
-  }, []);
-
-  // useEffect(() => {
-  //   gsap.from(".title", {
-  //     opacity: 0,
-  //     duration: 1,
-  //     y: 100,
-  //     ease: "power4.out",
-  //   });
-  // }, []);
+  };
 
   return (
-    <>
-      <div
-        className="black-screen bg-black w-full h-[100vh] absolute z-50"
-        style={{ opacity: 1 }}
-      ></div>
-      <div className="w-full h-[12vh] bg-white">
-        <span className="z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-gray-800 to-gray-600 bg-clip-text text-center text-4xl md:text-6xl font-semibold leading-none text-transparent dark:from-white dark:to-black flex justify-center pt-6 md:pt-3 lg:pt-5 title">
-          Company Draw
-        </span>
-      </div>
-      <div className="bg-white w-full h-[88vh]">
-        <div className="relative flex items-center justify-center">
-          <button
-            onClick={handlePrevious}
-            className="absolute left-4 z-10 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 disabled:opacity-50"
-            disabled={currentTier === 0}
+    <div className="relative h-[100vh] w-full">
+      <div className="absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0" />
+      <div className="h-full w-full flex items-center justify-center relative z-10">
+        <div className="flex flex-col items-center gap-4">
+          <CustomButton
+            otherStyles={`w-[10vw] h-[7vh] text-xl bg-black/80 rounded-full border border-gray-600`}
+            onClick={() => handleTierClick("Bronze")}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6"
+            <span
+              className={`font-semibold text-3xl ${tierStyles["Bronze"].otherStyles}`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
-          </button>
-
-          <div
-            id="tier-container"
-            className="w-[44vw] overflow-x-hidden scroll-smooth"
+              Bronze
+            </span>
+          </CustomButton>
+          <CustomButton
+            otherStyles={`w-[10vw] h-[7vh] text-xl bg-black/80 rounded-full border border-gray-600`}
+            onClick={() => handleTierClick("Silver")}
           >
-            <div
-              className="flex transition-transform duration-300 ease-in-out"
-              style={{ transform: `translateX(-${currentTier * 100}%)` }}
+            <span
+              className={`font-semibold text-3xl ${tierStyles["Silver"].otherStyles}`}
             >
-              <TierTable
-                tier="Bronze"
-                otherStyles="bg-gradient-to-br from-[#DAA520] to-[#831704] bg-clip-text text-transparent"
-                companies={companiesData.companies
-                  .filter((company) => company.tier === "bronze")
-                  .map(({ name, image, table, entry_at }) => ({
-                    name,
-                    image,
-                    table,
-                    entry_at,
-                  }))}
-                isLoading={isLoading}
-                sortByTime={sortByTime}
-              />
-              <TierTable
-                tier="Silver"
-                otherStyles="bg-gradient-to-br from-[#C7C9CB] to-[#848B98] bg-clip-text text-transparent"
-                companies={companiesData.companies
-                  .filter((company) => company.tier === "silver")
-                  .map(({ name, image, table, entry_at }) => ({
-                    name,
-                    image,
-                    table,
-                    entry_at,
-                  }))}
-                isLoading={isLoading}
-                sortByTime={sortByTime}
-              />
-              <TierTable
-                tier="Gold"
-                otherStyles="bg-gradient-to-br from-[#a28834] to-[#D4AF37] bg-clip-text text-transparent"
-                companies={companiesData.companies
-                  .filter((company) => company.tier === "gold")
-                  .map(({ name, image, table, entry_at }) => ({
-                    name,
-                    image,
-                    table,
-                    entry_at,
-                  }))}
-                isLoading={isLoading}
-                sortByTime={sortByTime}
-              />
-            </div>
-          </div>
-
-          <button
-            onClick={handleNext}
-            className="absolute right-4 z-10 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 disabled:opacity-50"
-            disabled={currentTier === 2}
+              Silver
+            </span>
+          </CustomButton>
+          <CustomButton
+            otherStyles={`w-[10vw] h-[7vh] text-xl bg-black/80 rounded-full border border-gray-600`}
+            onClick={() => handleTierClick("Gold")}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-6 h-6"
+            <span
+              className={`font-semibold text-3xl ${tierStyles["Gold"].otherStyles}`}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </button>
+              Gold
+            </span>
+          </CustomButton>
         </div>
-
-        <Button
-          onClick={handleShuffle}
-          className="rounded-full font-bold text-lg mx-auto flex my-5 shadow-md shadow-gray-400 bg-foreground text-background px-7 py-7 hover:bg-gray-800"
-        >
-          Shuffle
-        </Button>
       </div>
-    </>
+    </div>
   );
 }
+
+export default DrawScreen;
