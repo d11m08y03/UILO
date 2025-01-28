@@ -8,7 +8,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const Mask = React.forwardRef<HTMLButtonElement, ButtonProps>(({ 
   variant = 'default',
   className,
-  ...props 
 }, ref) => {
   return (
     <button
