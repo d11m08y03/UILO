@@ -22,5 +22,13 @@ func (s *Server) RegisterRoutes() http.Handler {
 		api.POST("/upload-companies", nil)
 	}
 
+	distDir := "./frontend/dist"
+
+	r.Static("/", distDir)
+
+	r.NoRoute(func(c *gin.Context) {
+		c.File(distDir + "/index.html")
+	})
+
 	return r
 }
