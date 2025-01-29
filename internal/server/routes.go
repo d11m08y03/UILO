@@ -17,15 +17,61 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowCredentials: true,
 	}))
 
+	alreadyShuffled := false
+
+	// API routes
 	api := r.Group("/api")
 	{
-		api.POST("/upload-companies", nil)
+		api.GET("/companies", func(ctx *gin.Context) {
+
+			if !alreadyShuffled {
+				err := s.db.ShuffleCompanies()
+
+				if err != nil {
+					ctx.JSON(http.StatusInternalServerError, gin.H{
+						"error":   "Failed to retrieve companies",
+						"details": err.Error(),
+					})
+
+					return
+				}
+				alreadyShuffled = true
+			}
+
+			companies, err := s.db.GetCompanies()
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to retrieve companies",
+					"details": err.Error(),
+				})
+				return
+			}
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"companies": companies,
+			})
+		})
+
+		api.GET("/reset", func(ctx *gin.Context) {
+			err := s.db.ShuffleCompanies()
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to retrieve companies",
+					"details": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.Status(http.StatusOK)
+		})
 	}
 
+	// Static file serving
 	distDir := "./frontend/dist"
+	r.Static("/static", distDir)
 
-	r.Static("/", distDir)
-
+	// Catch-all route for serving the frontend's index.html
 	r.NoRoute(func(c *gin.Context) {
 		c.File(distDir + "/index.html")
 	})
