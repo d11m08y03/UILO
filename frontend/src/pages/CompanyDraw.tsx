@@ -4,6 +4,14 @@ import { gsap } from "gsap";
 import { useLocation } from "react-router-dom";
 import ModalCompanyTable from "@/components/ModalCompanyTable";
 
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
 interface CompanyDrawDataProps {
   tier: string;
   otherStyles?: string;
@@ -27,6 +35,9 @@ export default function CompanyDraw() {
   const [iconSize, _] = useState(150);
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>();
+
+  const [selectedCompany, setSelectedCompany] = useState<string>("");
+  const [selectedStand, setSelectedStand] = useState<string>("");
 
   // console.log("radius: " + radius)
   // console.log("tier: " + tier.toString())
@@ -126,7 +137,7 @@ export default function CompanyDraw() {
       className="flex inital-fade h-[100vh] w-full items-center justify-center relative"
       style={{ opacity: 0 }}
     >
-      <div className="absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0" />
+      <div className="absolute h-full w-full bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0" />
       <div className="relative flex h-[100vh] w-full flex-col items-center justify-center overflow-hidden z-10">
         <div
           className={`mt-[45vh] w-48 h-12 rounded-full flex items-center justify-center`}
@@ -142,13 +153,39 @@ export default function CompanyDraw() {
           We'll begin in a few seconds...
         </span>
         <div className="mt-4">
-          <ModalCompanyTable
-            tier={tier}
-            companies={companies}
-            otherStyles={otherStyles}
-            handleStart={handleStart}
-            onClose={handleStop}
-          />
+          <div className="mt-2 z-40">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="z-50 relative overflow-hidden h-16 mb-3 rounded-2xl px-6"
+                >
+                  {selectedCompany ? selectedCompany : "Select a company"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 rounded-md">
+              {companies.map((company) => (
+                <DropdownMenuItem
+                  key={company.name}
+                  onClick={() => setSelectedCompany(company.name)}
+                >
+                  {company.name}
+                </DropdownMenuItem>
+            ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className=" flex justify-center">
+          {selectedCompany && (
+            <ModalCompanyTable
+              tier={tier}
+              companies={companies.filter((company) => company.name === selectedCompany)}
+              otherStyles={otherStyles}
+              handleStart={handleStart}
+              onClose={handleStop}
+            />
+          )}
+          </div>
         </div>
         <div className="mt-64 absolute inset-0 z-0 flex h-full w-full items-center justify-center">
           <OrbitingCircles

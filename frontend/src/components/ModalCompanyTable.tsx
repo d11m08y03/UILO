@@ -66,17 +66,21 @@ function ModalCompanyTable({
   const handleDraw = () => {
     handleStart();
 
-    if (currentIndex === companies.length - 1) {
-      setIsComplete(true);
-      setIsOpen(true);
-      return;
-    }
-
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => prevIndex + 1);
       setIsOpen(true);
       handeConfetti();
-    }, 3000);
+      
+      // For single company case, don't increment index
+      if (companies.length === 1) {
+        return;
+      }
+
+      if (currentIndex === companies.length - 1) {
+        setIsComplete(true);
+      } else {
+        setCurrentIndex((prevIndex) => prevIndex + 1);
+      }
+    }, 2000);
   };
 
   return (
