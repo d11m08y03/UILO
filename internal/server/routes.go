@@ -69,11 +69,10 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// Static file serving
 	distDir := "./frontend/dist"
-	r.Static("/static", distDir)
+	r.Static("/assets", distDir)
 
-	// Catch-all route for serving the frontend's index.html
-	r.NoRoute(func(c *gin.Context) {
-		c.File(distDir + "/index.html")
+	r.NoRoute(func(ctx *gin.Context) {
+		ctx.File(distDir + "/index.html")
 	})
 
 	return r

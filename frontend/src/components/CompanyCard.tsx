@@ -7,8 +7,6 @@ import {
 
 type CompanyCardProps = {
   name: string;
-  logo: string;
-  field: string[];
   children?: React.ReactNode; 
 };
 

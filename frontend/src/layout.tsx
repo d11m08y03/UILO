@@ -3,13 +3,7 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }): JSX.Element => {
-  return (
-    <>
-      <main className="">
-        {children}
-      </main>
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default Layout;

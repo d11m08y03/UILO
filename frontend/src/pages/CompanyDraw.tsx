@@ -13,18 +13,18 @@ interface CompanyDrawDataProps {
   companies: {
     name: string;
     image: string;
-    table: string;
+    stand: string;
   }[];
 }
 
 export default function CompanyDraw() {
   const location = useLocation();
-  const { tier, companies, otherStyles, radiusSize, bubbleStyle, doubleBubble} = location.state as CompanyDrawDataProps;
-  console.log("entire state:", location.state);
-  
+  const { tier, companies, otherStyles, radiusSize, bubbleStyle } =
+    location.state as CompanyDrawDataProps;
+
   const [speed, setSpeed] = useState(1);
   // const [radius, setRadius] = useState(600);
-  const [iconSize, seticonSize] = useState(150);
+  const [iconSize, _] = useState(150);
   const animationRef = useRef<number>();
   const startTimeRef = useRef<number>();
 
@@ -32,15 +32,15 @@ export default function CompanyDraw() {
   // console.log("tier: " + tier.toString())
 
   // useEffect(() => {
-    // const handleResize = () => {
-    //   if (window.innerWidth <= 768) {
-    //     setRadius(450);
-    //     seticonSize(140);
-    //   } else {
-    //     setRadius(500);
-    //     seticonSize(150);
-    //   }
-    // };
+  // const handleResize = () => {
+  //   if (window.innerWidth <= 768) {
+  //     setRadius(450);
+  //     seticonSize(140);
+  //   } else {
+  //     setRadius(500);
+  //     seticonSize(150);
+  //   }
+  // };
 
   //   handleResize(); // Initial check
   //   window.addEventListener("resize", handleResize);
@@ -128,8 +128,12 @@ export default function CompanyDraw() {
     >
       <div className="absolute h-full w-full bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)] z-0" />
       <div className="relative flex h-[100vh] w-full flex-col items-center justify-center overflow-hidden z-10">
-        <div className={`mt-[45vh] w-48 h-12 rounded-full flex items-center justify-center`}>
-          <span className={`font-semibold text-5xl ${otherStyles}`}>{tier}</span>
+        <div
+          className={`mt-[45vh] w-48 h-12 rounded-full flex items-center justify-center`}
+        >
+          <span className={`font-semibold text-5xl ${otherStyles}`}>
+            {tier}
+          </span>
         </div>
         <span className="z-30 pointer-events-none whitespace-pre-wrap bg-gradient-to-b from-black to-gray-800 bg-clip-text text-center text-3xl md:text-7xl font-semibold leading-none text-transparent dark:from-white dark:to-black">
           Company Draw
@@ -138,12 +142,12 @@ export default function CompanyDraw() {
           We'll begin in a few seconds...
         </span>
         <div className="mt-4">
-          <ModalCompanyTable 
-          tier={tier}
-          companies={companies}
-          otherStyles={otherStyles}
-          handleStart={handleStart}
-          onClose={handleStop}
+          <ModalCompanyTable
+            tier={tier}
+            companies={companies}
+            otherStyles={otherStyles}
+            handleStart={handleStart}
+            onClose={handleStop}
           />
         </div>
         <div className="mt-64 absolute inset-0 z-0 flex h-full w-full items-center justify-center">

@@ -1,6 +1,10 @@
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 import { MapPin, Phone, Mail, Camera } from "lucide-react";
 import CompanyCard from "@/components/CompanyCard";
+import backgroundImg from "../assets/images/UIUILO.png";
+import uomLogo from "../assets/images/uomLogo.png";
+import { useEffect, useState } from "react";
 import picture1 from "../assets/images/gallery/Gallery1.jpg";
 import picture2 from "../assets/images/gallery/Gallery2.jpg";
 import picture3 from "../assets/images/gallery/Gallery3.jpg";
@@ -16,14 +20,10 @@ import picture12 from "../assets/images/gallery/Gallery12.jpg";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building, Building2, CalendarDays, Map } from "lucide-react";
-import companies from "@/lib/companies";
-
-
+import { CalendarDays } from "lucide-react";
 
 import logo from "../assets/images/UILO_logo.png";
 import powaSetup from "../assets/images/powa_setup.jpg";
-import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
   CarouselContent,
@@ -46,22 +46,6 @@ const images = [
   picture10,
   picture12,
 ];
-
-import {
-  Menubar,
-  MenubarCheckboxItem,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from "@/components/ui/menubar"
 
 const handleScrollToCompanies = () => {
   const element = document.getElementById("participating-companies");
@@ -118,9 +102,6 @@ const handleScrollToGallery = () => {
     console.error("Error");
   }
 };
-
-
-
 
 const TimeLine = () => {
   return (
@@ -186,19 +167,14 @@ const TimeLine = () => {
   );
 };
 
-import { Link } from 'react-scroll'; 
-import backgroundImg from "../assets/images/UIUILO.png" 
-import uomLogo from "../assets/images/uomLogo.png"
-import { useState } from "react";
-import background from "../assets/images/bg2.avif"  
 const Hero = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div
-      className="h-screen" 
+      className="h-screen"
       style={{
-        backgroundImage: `url(${backgroundImg})`, 
+        backgroundImage: `url(${backgroundImg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
@@ -209,9 +185,12 @@ const Hero = () => {
           <div className="flex items-center">
             <img src={logo} alt="Logo" className="h-20 w-28" />
           </div>
-  
+
           <div className="md:hidden">
-            <button onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle Menu">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle Menu"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-8 w-8 text-gray-800"
@@ -232,7 +211,7 @@ const Hero = () => {
               </svg>
             </button>
           </div>
-  
+
           <nav
             className={`${
               menuOpen ? "block" : "hidden"
@@ -240,70 +219,95 @@ const Hero = () => {
           >
             <ul className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0">
               <li>
-                <Button onClick={handleScrollToEvent} className="lg:text-white xl:text-white" variant="link">
+                <Button
+                  onClick={handleScrollToEvent}
+                  className="lg:text-white xl:text-white"
+                  variant="link"
+                >
                   Event Schedule
                 </Button>
               </li>
               <li>
-                <Button onClick={handleScrollToCompanies} className="lg:text-white xl:text-white" variant="link">
+                <Button
+                  onClick={handleScrollToCompanies}
+                  className="lg:text-white xl:text-white"
+                  variant="link"
+                >
                   Participating Companies
                 </Button>
               </li>
               <li>
-                <Button onClick={handleScrollToMap} className="lg:text-white xl:text-white" variant="link">
+                <Button
+                  onClick={handleScrollToMap}
+                  className="lg:text-white xl:text-white"
+                  variant="link"
+                >
                   Floor Map
                 </Button>
               </li>
               <li>
-                <Button onClick={handleScrollToGallery} className="lg:text-white xl:text-white" variant="link">
+                <Button
+                  onClick={handleScrollToGallery}
+                  className="lg:text-white xl:text-white"
+                  variant="link"
+                >
                   Gallery
                 </Button>
               </li>
               <li>
-                <Button onClick={handleScrollToContact} className="lg:text-white xl:text-white" variant="link">
+                <Button
+                  onClick={handleScrollToContact}
+                  className="lg:text-white xl:text-white"
+                  variant="link"
+                >
                   Contact Us
                 </Button>
               </li>
             </ul>
           </nav>
         </div>
-  
+
         <div
           id="heroContent"
           className="flex items-center justify-center text-center text-white px-6 md:px-12 h-full"
         >
-        <div className="flex flex-col items-center">
-             <img className="lg:w-96 lg:h-112 w-36 h-30 shadow-lg" src={uomLogo} alt="Logo of the University of Mauritius" />
-             <h1 className="lg:text-4xl text-blue-500 mt-0">INDUSTRY RECRUITMENT <span className="text-white">2025</span></h1>
-             <h2 className="lg:text-2xl text-sm">5-6 FEBRUARY 2025 - <span className="text-blue-500 lg:text-2xl text-sm">POWA, UNIVERSITY OF MAURITIUS</span></h2>
-            </div>
-        
+          <div className="flex flex-col items-center">
+            <img
+              className="lg:w-96 lg:h-112 w-36 h-30 shadow-lg"
+              src={uomLogo}
+              alt="Logo of the University of Mauritius"
+            />
+            <h1 className="lg:text-4xl text-blue-500 mt-0">
+              INDUSTRY RECRUITMENT <span className="text-white">2025</span>
+            </h1>
+            <h2 className="lg:text-2xl text-sm">
+              5-6 FEBRUARY 2025 -{" "}
+              <span className="text-blue-500 lg:text-2xl text-sm">
+                POWA, UNIVERSITY OF MAURITIUS
+              </span>
+            </h2>
+          </div>
         </div>
         <div>
-              <h1 className="mt-6 lg:mt-12 lg:text-2xl lg:pl-12 pl-3 font-extrabold-900 mb-2">ABOUT THE EVENT</h1>
-              <h2 className="lg:w-3/5 pl-12 lg:text-l text-sm lg:pl-12 pl-3">The career fair provides students with a valuable opportunity to explore potential career paths, connect with employers, and gather information about various industries. It serves as a platform for students to network, seek internship or job opportunities, and gain insights into the current job market. The event typically features a diverse range of companies and organizations eager to engage with students and discuss potential career prospects. Attending the career fair is a proactive step toward building a successful and fulfilling professional future.</h2>
+          <h1 className="mt-6 lg:mt-12 lg:text-2xl lg:pl-12 pl-3 font-extrabold-900 mb-2">
+            ABOUT THE EVENT
+          </h1>
+          <h2 className="lg:w-3/5 pl-12 lg:text-l text-sm lg:pl-12 pl-3">
+            The career fair provides students with a valuable opportunity to
+            explore potential career paths, connect with employers, and gather
+            information about various industries. It serves as a platform for
+            students to network, seek internship or job opportunities, and gain
+            insights into the current job market. The event typically features a
+            diverse range of companies and organizations eager to engage with
+            students and discuss potential career prospects. Attending the
+            career fair is a proactive step toward building a successful and
+            fulfilling professional future.
+          </h2>
         </div>
-
       </div>
     </div>
   );
-  
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const EventSchedule = () => {
   return (
@@ -346,27 +350,53 @@ const EventSchedule = () => {
   );
 };
 
+interface Company {
+  id: number;
+  name: string;
+  category: string;
+  timestamp: string;
+  stand: string;
+}
+
 const ParticipatingCompanies = () => {
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/companies");
+        
+        if (Array.isArray(response.data.companies)) {
+          setCompanies(response.data.companies);
+        } else {
+          setError("Unexpected data format");
+        }
+      } catch (err) {
+        setError("Failed to fetch companies data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
     <div className="lg:pl-2 xl:pl-2" id="participating-companies">
       <div className="flex justify-between">
         <p className="text-3xl font-bold mb-5">Participating Companies</p>
-        <Building2 />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {companies.map((company, index) => (
-          <CompanyCard
-            key={index}
-            name={company.name}
-            logo={company.logo}
-            field={[]}
-          >
+          <CompanyCard key={index} name={company.name}>
             <div className="flex space-x-3">
-              {company.field.map((field, idx) => (
-                <Badge key={idx} className="text-xs mt-10">
-                  {field}
-                </Badge>
-              ))}
+              <p>{company.stand}</p>
             </div>
           </CompanyCard>
         ))}
@@ -386,7 +416,6 @@ const Floormap = () => {
     </div>
   );
 };
-
 
 const Gallery = () => {
   return (
@@ -419,7 +448,6 @@ const Gallery = () => {
     </div>
   );
 };
-
 
 const Contact: React.FC = () => {
   return (
@@ -498,6 +526,5 @@ const Home = () => {
 };
 
 export default Home;
-
 
 // Container before - container sm:max-w-xl mx-auto max-w-xs lg:max-w-4xl md:max-w-2xl xl:max-w-6xl

@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import CustomButton from "./CustomButton";
 import confetti from "canvas-confetti";
-
 
 interface ModalCompanyTableProps {
   tier: string;
   companies: {
     name: string;
-    table: string;
+    stand: string;
   }[];
   otherStyles?: string;
   onClose: () => void;
@@ -67,7 +65,7 @@ function ModalCompanyTable({
 
   const handleDraw = () => {
     handleStart();
-    
+
     if (currentIndex === companies.length - 1) {
       setIsComplete(true);
       setIsOpen(true);
@@ -82,8 +80,8 @@ function ModalCompanyTable({
   };
 
   return (
-    <Dialog 
-      open={isOpen} 
+    <Dialog
+      open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
         if (!open) onClose();
@@ -106,13 +104,19 @@ function ModalCompanyTable({
           <DialogDescription>
             <div className="my-32">
               <p className="flex justify-center text-9xl">
-                {!isComplete && (<span className={`font-semibold ${otherStyles}`}>{currentCompany.table}</span>)}
+                {!isComplete && (
+                  <span className={`font-semibold ${otherStyles}`}>
+                    {currentCompany.stand}
+                  </span>
+                )}
                 {isComplete && (
                   <div className="flex flex-col items-center">
                     <span className="text-8xl font-semibold text-black">
                       Complete!
                     </span>
-                    <div className={`px-7 py-3 rounded-full mt-5 bg-black flex items-center justify-center`}>
+                    <div
+                      className={`px-7 py-3 rounded-full mt-5 bg-black flex items-center justify-center`}
+                    >
                       <span className={`text-3xl font-semibold ${otherStyles}`}>
                         {tier}
                       </span>

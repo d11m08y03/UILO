@@ -1,12 +1,18 @@
-import React from "react";
 import CustomButton from "@/components/CustomButton";
 import { useNavigate } from "react-router-dom";
-import companiesData from "../data/dummycompanies.json";
-import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+interface Company {
+  id: number;
+  name: string;
+  category: string;
+  timestamp: string;
+  stand: string;
+}
 
 function DrawScreen() {
-  const [tierStyles, setTierStyles] = useState({
+  const [tierStyles, _] = useState({
     Bronze: {
       otherStyles:
         "bg-gradient-to-br from-[#DAA520] to-[#831704] bg-clip-text text-transparent",
@@ -30,18 +36,43 @@ function DrawScreen() {
     },
   });
 
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const sortedCompanies = [...companiesData.companies].sort((a, b) => {
-    return dayjs(a.entry_at).isAfter(dayjs(b.entry_at)) ? 1 : -1;
-  });
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/companies");
+        if (Array.isArray(response.data.companies)) {
+          setCompanies(response.data.companies);
+        } else {
+          setError("Unexpected data format");
+        }
+      } catch (err) {
+        setError("Failed to fetch companies data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  // const sortedCompanies = [...companies].sort((a, b) => {
+  //   return dayjs(a.timestamp).isAfter(dayjs(b.timestamp)) ? 1 : -1;
+  // });
 
   const handleTierClick = (tier: keyof typeof tierStyles) => {
-    const filteredCompanies = sortedCompanies
-      .filter((company) => company.tier === tier.toLowerCase())
-      .map(({ name, image, table }) => ({
+    const filteredCompanies = companies
+      .filter(
+        (company) => company.category.toLowerCase() === tier.toLowerCase(),
+      )
+      .map(({ name, stand}) => ({
         name,
-        image,
-        table,
+        stand,
       }));
 
     navigate("/company-draw", {
@@ -55,6 +86,9 @@ function DrawScreen() {
       },
     });
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="relative h-[100vh] w-full">
