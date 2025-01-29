@@ -11,7 +11,7 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:8000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true,
@@ -66,14 +66,6 @@ func (s *Server) RegisterRoutes() http.Handler {
 			ctx.Status(http.StatusOK)
 		})
 	}
-
-	// Static file serving
-	distDir := "./frontend/dist"
-	r.Static("/assets", distDir)
-
-	r.NoRoute(func(ctx *gin.Context) {
-		ctx.File(distDir + "/index.html")
-	})
 
 	return r
 }
