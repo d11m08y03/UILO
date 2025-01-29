@@ -1,148 +1,328 @@
 {
   "companies": [
     {
-      "company_id": "1",
-      "name": "Rogers",
-      "industry": "Telecommunications",
-      "location": "Mauritius",
-      "entry_at": "2024-11-22T10:30:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
-      "table": "BS01",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "2",
-      "name": "MCB",
-      "industry": "Banking",
-      "location": "Mauritius",
-      "entry_at": "2024-11-20T15:15:00Z",
-      "image": "https://arda.africa/wp-content/uploads/2022/08/Arda_Sponsor_Logos_Silver_MCB.png",
-      "table": "SS02",
-      "tier": "silver"
-    },
-    {
-      "company_id": "3",
-      "name": "Business at Work",
-      "industry": "IT Services",
-      "location": "Mauritius",
-      "entry_at": "2024-11-21T09:00:00Z",
-      "image": "https://industry-recruitment-uilo.netlify.app/assets/organisations-2024/Logo%20BAW%20.png",
-      "table": "BS03",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "4",
-      "name": "IQEQ",
-      "industry": "Financial Services",
-      "location": "Mauritius",
-      "entry_at": "2024-11-21T09:00:00Z",
-      "image": "https://industry-recruitment-uilo.netlify.app/assets/organisations-2024/IQ-EQ_1030_TeamsBackdrop_Logo%20large.png",
-      "table": "BS04",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "5",
-      "name": "IQera",
-      "industry": "Technology",
-      "location": "Mauritius",
-      "entry_at": "2024-11-22T10:30:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgcfM6HjTi2hWr2mmsIJpxMQmDK-kSIh2aiA&s",
-      "table": "BS05",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "6",
-      "name": "Aspen",
-      "industry": "Insurance",
-      "location": "Mauritius",
-      "entry_at": "2024-11-20T15:15:00Z",
-      "image": "https://industry-recruitment-uilo.netlify.app/assets/organisations-2024/Aspen_Global_Logo.png",
-      "table": "SS06",
-      "tier": "silver"
-    },
-    {
-      "company_id": "7",
-      "name": "Apex",
-      "industry": "Fund Administration",
-      "location": "Mauritius",
-      "entry_at": "2024-11-21T09:00:00Z",
-      "image": "https://industry-recruitment-uilo.netlify.app/assets/img/supporters/Apex%20Logo.jpg",
-      "table": "GS07",
-      "tier": "gold"
-    },
-    {
-      "company_id": "8",
-      "name": "TotalEnergies",
-      "industry": "Energy",
-      "location": "Mauritius",
-      "entry_at": "2024-11-22T10:30:00Z",
-      "image": "https://industry-recruitment-uilo.netlify.app/assets/organisations-2024/TotalEnergies_Logo_RGB.png",
-      "table": "GS08",
-      "tier": "gold"
-    },
-    {
-      "company_id": "9",
-      "name": "2Cana",
-      "industry": "Technology",
-      "location": "Mauritius",
-      "entry_at": "2024-11-20T09:00:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-xhhfmpjdk6CoSPTq4AlKnaTac3lmB41oVA&s",
-      "table": "BS09",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "10",
-      "name": "Currimjee Jeewanjee & Co. Ltd",
-      "industry": "Trading",
-      "location": "Mauritius",
-      "entry_at": "2024-11-23T11:00:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
-      "table": "SS10",
-      "tier": "silver"
-    },
-    {
-      "company_id": "11",
-      "name": "State Bank of Mauritius",
-      "industry": "Banking",
-      "location": "Mauritius",
-      "entry_at": "2024-11-24T12:00:00Z",
-      "image": "https://www.sbmgroup.com/wp-content/uploads/2020/11/SBM-Logo-2020.png",
-      "table": "GS11",
-      "tier": "gold"
-    },
-    {
-      "company_id": "12",
-      "name": "Air Mauritius",
-      "industry": "Aviation",
-      "location": "Mauritius",
-      "entry_at": "2024-11-25T13:00:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
-      "table": "BS12",
-      "tier": "bronze"
-    },
-    {
-      "company_id": "13",
-      "name": "Alteo",
-      "industry": "Sugar",
-      "location": "Mauritius",
-      "entry_at": "2024-11-26T14:00:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
-      "table": "SS13",
-      "tier": "silver"
-    },
-    {
-      "company_id": "14",
-      "name": "Gautam Ltd",
-      "industry": "Textiles",
-      "location": "Mauritius",
-      "entry_at": "2024-11-27T15:00:00Z",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
-      "table": "BS14",
-      "tier": "bronze"
-    },
-    {
       "company_id": "15",
-      "name": "Eclo",
+      "name": "SunPower Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "17",
+      "name": "GreenTech Innovations",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "18",
+      "name": "EcoVision Ltd",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "19",
+      "name": "Sustainable Power Corp",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "20",
+      "name": "CleanEnergy Systems",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "21",
+      "name": "RenewTech Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "22",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "23",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "24",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "25",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "26",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "27",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "28",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "29",
+      "name": "EcoSmart Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "30",
+      "name": "GreenLife Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "31",
+      "name": "SolarTech Ventures",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "32",
+      "name": "WindPower Dynamics",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "33",
+      "name": "BioEnergy Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "34",
+      "name": "EarthPower Technologies",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "35",
+      "name": "NatureTech Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "36",
+      "name": "PureEnergy Corp",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "37",
+      "name": "EcoFlow Systems",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "38",
+      "name": "GreenWave Energy",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "39",
+      "name": "SustainableTech",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "40",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "bronze"
+    },
+    {
+      "company_id": "41",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "silver"
+    },
+    {
+      "company_id": "42",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "silver"
+    },
+    {
+      "company_id": "43",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "silver"
+    },
+    {
+      "company_id": "44",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "silver"
+    },
+    {
+      "company_id": "45",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "46",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "47",
+      "name": "EcoVolt Solutions",
+      "industry": "Renewable Energy",
+      "location": "Mauritius",
+      "entry_at": "2024-11-28T16:00:00Z",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7NDDKTT55JfXGjOCVmbjzJbJIE9KQcTrb6g&s",
+      "table": "GS15",
+      "tier": "gold"
+    },
+    {
+      "company_id": "48",
+      "name": "EcoVolt Solutions",
       "industry": "Renewable Energy",
       "location": "Mauritius",
       "entry_at": "2024-11-28T16:00:00Z",
