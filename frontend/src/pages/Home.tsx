@@ -24,6 +24,7 @@ import { motion, useInView } from "framer-motion";
 import PlayButton from "@/components/PlayBtn";
 import uomLogo from "../assets/images/uomLogo.png";
 import backgroundImg from "../assets/images/output-onlinepngtools.png";
+
 import {
   Carousel,
   CarouselContent,
@@ -44,6 +45,7 @@ const images = [
   picture10,
   picture12,
 ];
+
 const handleScrollToCompanies = () => {
   const element = document.getElementById("participating-companies");
   if (element) {
@@ -612,7 +614,6 @@ const Gallery = () => {
     </motion.div>
   );
 };
-
 
 
 

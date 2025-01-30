@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 type CompanyCardProps = {
   name: string;
   tier: "Gold" | "Silver" | "Bronze"; // Tier types are kept as uppercase to match the data
+  children?: React.ReactNode; 
 };
 
 const CompanyCard: React.FC<CompanyCardProps> = ({ name, tier }) => {
