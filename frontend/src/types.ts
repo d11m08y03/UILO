@@ -1,10 +1,4 @@
-export interface Company {
-    field: any;
-    image: string | undefined;
-    id: number;
-    logo: string;
-    name: string;
-    description: string;
-    detailsLink: string;
-  }
-  
+type Company = {
+  name: string;
+  tier: "Gold" | "Silver" | "Bronze"; 
+};
