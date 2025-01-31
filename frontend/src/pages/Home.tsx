@@ -211,7 +211,7 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <img src={logo} alt="Logo" className="h-12 w-20 md:h-16 md:w-24" />
+            <img src={logo} alt="Logo" className="h-14 w-24 md:h-16 md:w-28 lg:h-20 lg:w-32" />
           </motion.div>
 
           {/* Mobile Menu Button */}
@@ -243,27 +243,29 @@ const Hero = () => {
             ref={menuRef}
             className={`${
               menuOpen ? "block" : "hidden"
-            } absolute top-14 left-0 w-full bg-white shadow-md md:shadow-none md:static md:flex md:space-x-6 md:bg-transparent md:block`}
+            } absolute top-14 left-0 w-full bg-white shadow-md md:shadow-none md:static md:flex md:space-x-6 md:bg-transparent md:block justify-end`}
           >
-            <ul className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 text-center">
-              {[
-                { label: "Event Schedule", onClick: handleScrollToEvent },
-                { label: "Participating Companies", onClick: handleScrollToCompanies },
-                { label: "Floor Map", onClick: handleScrollToMap },
-                { label: "Gallery", onClick: handleScrollToGallery },
-                { label: "Contact Us", onClick: handleScrollToContact },
-              ].map((item, index) => (
-                <li key={index}>
-                  <Button
-                    onClick={item.onClick}
-                    className="text-black md:text-white text-sm md:text-lg"
-                    variant="link"
-                  >
-                    {item.label}
-                  </Button>
-                </li>
-              ))}
-            </ul>
+         <div className="flex justify-start flex-col">
+  <ul className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 text-center">
+    {[
+      { label: "Event Schedule", onClick: handleScrollToEvent },
+      { label: "Participating Companies", onClick: handleScrollToCompanies },
+      { label: "Floor Map", onClick: handleScrollToMap },
+      { label: "Gallery", onClick: handleScrollToGallery },
+      { label: "Contact Us", onClick: handleScrollToContact },
+    ].map((item, index) => (
+      <li key={index}>
+        <button
+          onClick={item.onClick}
+          className="text-black md:text-white text-sm md:text-lg hover:text-blue-500 ml-5"
+        >
+          {item.label}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
           </nav>
         </div>
 
@@ -278,15 +280,19 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
+            {/* UOM Logo */}
             <img
-              className="w-40 h-auto max-w-[90%] md:w-52 lg:w-64 object-contain"
-              src={uomLogo}
-              alt="University of Mauritius Logo"
-            />
-            <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl text-blue-600 mt-2">
+  className="w-48 h-auto max-w-[90%] md:w-56 lg:w-72"
+  src={uomLogo}
+  alt="University of Mauritius Logo"
+/>
+
+            {/* Event Title */}
+            <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold text-blue-500 mt-3">
               INDUSTRY RECRUITMENT <span className="text-white">2025</span>
             </h1>
-            <h2 className="text-xs sm:text-sm md:text-lg lg:text-xl">
+            {/* Date & Location */}
+            <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold">
               5-6 FEBRUARY 2025 -{" "}
               <span className="text-blue-600 md:text-lg lg:text-xl">
                 POWA, UNIVERSITY OF MAURITIUS
@@ -299,15 +305,15 @@ const Hero = () => {
 
         {/* About the Event */}
         <motion.div
-          className="p-4 text-center md:text-left"
+          className="p-6 text-center md:text-left"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
         >
-          <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl text-blue-500 font-bold mb-2">
+          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-blue-500 font-bold mb-4">
             ABOUT THE EVENT
           </h1>
-          <p className="max-w-3xl mx-auto md:mx-0 text-xs sm:text-sm md:text-md lg:text-lg text-blue-600 leading-relaxed">
+          <p className="max-w-3xl mx-auto md:mx-0 text-sm sm:text-md md:text-lg lg:text-xl text-blue-600 leading-relaxed">
             The career fair offers students a chance to explore career paths, connect
             with employers, and learn about various industries. It's a platform for
             networking, seeking internships or jobs, and understanding the job market.
