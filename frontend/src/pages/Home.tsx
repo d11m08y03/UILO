@@ -21,7 +21,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion"; 
 import PlayButton from "@/components/PlayBtn";
 import uomLogo from "../assets/images/uomLogo.png";
-import backgroundImg from "../assets/images/output-onlinepngtools.png";
+import backgroundImg from "../assets/images/hero-background.png";
 
 import {
   Carousel,
@@ -192,13 +192,14 @@ const Hero = () => {
 
   return (
     <div
-      className="h-full min-h-screen flex flex-col"
+      className="h-full min-h-screen flex flex-col "
       style={{
         backgroundImage: `url(${backgroundImg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
+      
       <div className="lg:pl-2 xl:pl-2">
         {/* Header */}
         <div className="flex justify-between items-center p-4 relative">
@@ -255,7 +256,7 @@ const Hero = () => {
       <li key={index}>
         <button
           onClick={item.onClick}
-          className="text-black md:text-white text-sm md:text-lg hover:text-blue-500 ml-5"
+          className="text-black md:text-white text-sm md:text-lg hover:text-blue-900 mr-5 hover:underline"
         >
           {item.label}
         </button>
@@ -286,13 +287,13 @@ const Hero = () => {
 />
 
             {/* Event Title */}
-            <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold text-blue-500 mt-3">
+            <h1 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-bold text-blue-900 mt-2">
               INDUSTRY RECRUITMENT <span className="text-white">2025</span>
             </h1>
             {/* Date & Location */}
-            <h2 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold">
+            <h2 className="text-sm sm:text-xl md:text-xl lg:text-2xl font-semibold">
               5-6 FEBRUARY 2025 -{" "}
-              <span className="text-blue-600 md:text-lg lg:text-xl">
+              <span className="text-blue-900 md:text-lg lg:text-xl">
                 POWA, UNIVERSITY OF MAURITIUS
               </span>
             </h2>
@@ -308,7 +309,7 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
         >
-          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-blue-500 font-bold mb-4">
+          <h1 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl text-blue-600 font-bold mb-4">
             ABOUT THE EVENT
           </h1>
           <p className="max-w-3xl mx-auto md:mx-0 text-sm sm:text-md md:text-lg lg:text-xl text-blue-600 leading-relaxed">
@@ -340,7 +341,7 @@ const EventSchedule = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div id="eventSchedule" ref={ref} className="lg:pl-2 xl:pl-2">
+    <div id="eventSchedule" ref={ref} className="lg:p-2 xl:p-2">
       {/* Title Section - Animates When in View */}
       <motion.div
         className="flex items-center justify-center space-x-2 mb-5"
@@ -482,42 +483,61 @@ const ParticipatingCompanies = () => {
 const Floormap = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <motion.div
-      id="floor-map"
-      ref={ref}
-      className="border rounded-lg p-4 bg-[#dcf5fd] lg:pl-6 xl:pl-8"
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 1, ease: "easeOut" }}
-    >
-      {/* Title and Map Icon Section */}
+    <>
       <motion.div
-        className="flex items-center justify-center space-x-3 mb-5"
-        initial={{ opacity: 0, y: 20 }}
+        id="floor-map"
+        ref={ref}
+        className="border rounded-lg p-4 bg-[#dcf5fd] lg:pl-6 xl:pl-8"
+        initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ delay: 0.2, duration: 0.8 }}
+        transition={{ duration: 1, ease: "easeOut" }}
       >
-        <p className="text-3xl font-bold">Floor Map</p>
+        {/* Title and Map Icon Section */}
         <motion.div
-          animate={isInView ? { rotate: [0, 10, -10, 0] } : {}}
-          transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
+          className="flex items-center justify-center space-x-3 mb-5"
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.2, duration: 0.8 }}
         >
-          <Map className="w-10 h-10" />
+          <p className="text-3xl font-bold">Floor Map</p>
+          <motion.div
+            animate={isInView ? { rotate: [0, 10, -10, 0] } : {}}
+            transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
+          >
+            <Map className="w-10 h-10" />
+          </motion.div>
         </motion.div>
+
+        {/* Image Section with Click Event */}
+        <motion.img
+          src={powaSetup}
+          alt="Powa setup"
+          className="w-full rounded-lg shadow-lg cursor-pointer"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.3, duration: 1, ease: "easeOut" }}
+          onClick={() => setIsOpen(true)}
+        />
       </motion.div>
 
-      {/* Image Section with Animation */}
-      <motion.img
-        src={powaSetup}
-        alt="Powa setup"
-        className="w-full rounded-lg shadow-lg"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={isInView ? { opacity: 1, scale: 1 } : {}}
-        transition={{ delay: 0.3, duration: 1, ease: "easeOut" }}
-      />
-    </motion.div>
+      {/* Modal for Enlarged Image */}
+      {isOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+          <div className="relative p-4 bg-white rounded-lg max-w-4xl shadow-lg">
+            <button
+              className="absolute top-2 right-2  rounded-full p-1 hover:bg-gray-400"
+              onClick={() => setIsOpen(false)}
+            >
+              ✕
+            </button>
+            <img src={powaSetup} alt="Powa setup" className="rounded-lg w-full max-h-[80vh]" />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -628,18 +648,22 @@ const Contact: React.FC = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
         >
-          <motion.div
-            animate={isInView ? { y: [0, -5, 0] } : {}}
-            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <MapPin className="text-blue-600 h-10 w-10" />
-          </motion.div>
-          <div className="text-center lg:text-left">
-            <h3 className="font-semibold text-lg">Location</h3>
-            <p className="text-gray-600">
-              Ground Floor Ex-CPDL Building, University of Mauritius
-            </p>
-          </div>
+       <motion.div
+  animate={isInView ? { y: [0, -5, 0] } : {}}
+  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+  className="cursor-pointer"
+  onClick={() => window.open("https://www.google.com/maps/place/Examinations+Office/@-20.2339751,57.4921578,17z/data=!4m10!1m2!2m1!1sGround+Floor+Ex-CPDL+Building,+University+of+Mauritius!3m6!1s0x217c5aefffae1321:0xc05c178c0b6ed9d3!8m2!3d-20.2339751!4d57.4965352!15sCjZHcm91bmQgRmxvb3IgRXgtQ1BETCBCdWlsZGluZywgVW5pdmVyc2l0eSBvZiBNYXVyaXRpdXOSAQZvZmZpY2XgAQA!16s%2Fg%2F1q5bsf837?entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D", "_blank")}
+>
+  <MapPin className="text-blue-600 h-10 w-10" />
+</motion.div>
+<div className="text-center lg:text-left cursor-pointer" 
+  onClick={() => window.open("https://www.google.com/maps/place/Examinations+Office/@-20.2339751,57.4921578,17z/data=!4m10!1m2!2m1!1sGround+Floor+Ex-CPDL+Building,+University+of+Mauritius!3m6!1s0x217c5aefffae1321:0xc05c178c0b6ed9d3!8m2!3d-20.2339751!4d57.4965352!15sCjZHcm91bmQgRmxvb3IgRXgtQ1BETCBCdWlsZGluZywgVW5pdmVyc2l0eSBvZiBNYXVyaXRpdXOSAQZvZmZpY2XgAQA!16s%2Fg%2F1q5bsf837?entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D", "_blank")}
+>
+  <h3 className="font-semibold text-lg">Location</h3>
+  <p className="text-gray-600">
+    Ground Floor Ex-CPDL Building, University of Mauritius
+  </p>
+</div>
         </motion.div>
 
         {/* Divider on large screens */}
