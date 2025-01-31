@@ -37,7 +37,6 @@ export default function CompanyDraw() {
   const startTimeRef = useRef<number>();
 
   const [selectedCompany, setSelectedCompany] = useState<string>("");
-  const [selectedStand, setSelectedStand] = useState<string>("");
 
   // console.log("radius: " + radius)
   // console.log("tier: " + tier.toString())

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { MapPin, Phone, Mail, Camera } from "lucide-react";
 import CompanyCard from "@/components/CompanyCard";
 import picture1 from "../assets/images/gallery/Gallery1.jpg";
@@ -14,11 +13,10 @@ import picture11 from "../assets/images/gallery/Gallery14.jpg";
 import picture12 from "../assets/images/gallery/Gallery12.jpg";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Building, Building2, CalendarDays, Map } from "lucide-react";
+import { Building, CalendarDays, Map } from "lucide-react";
 import companies from "@/lib/companies";
 import logo from "../assets/images/UILO_logo.png";
 import powaSetup from "../assets/images/SetUpPowa.jpg";
-import { Badge } from "@/components/ui/badge";
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion"; 
 import PlayButton from "@/components/PlayBtn";
@@ -414,10 +412,7 @@ const EventSchedule = () => {
 
 
 
-const fadeInVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
+
 
 const ParticipatingCompanies = () => {
   const ref = useRef(null);
