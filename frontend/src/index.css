@@ -84,3 +84,14 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* styles.css */
+@media (orientation: landscape) {
+  .landscape\:bg-blue-500 {
+    background-color: rgb(59 130 246);
+  }
+  .landscape\:text-white {
+    color: white;
+  }
+  /* Add more landscape-specific styles as needed */
+}

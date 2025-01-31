@@ -125,7 +125,7 @@ const TimeLine = () => {
             Start Of Event
           </h3>
           <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">
-            08:00 am
+            09:00 am
           </time>
           <p className="text-base font-normal text-gray-500 dark:text-gray-400">
             The industry recruitment event kicks off today, bringing together
@@ -187,7 +187,6 @@ const Hero = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -195,7 +194,7 @@ const Hero = () => {
 
   return (
     <div
-      className="h-screen"
+      className="h-full min-h-screen flex flex-col"
       style={{
         backgroundImage: `url(${backgroundImg})`,
         backgroundSize: "cover",
@@ -204,7 +203,7 @@ const Hero = () => {
     >
       <div className="lg:pl-2 xl:pl-2">
         {/* Header */}
-        <div className="flex justify-between p-4">
+        <div className="flex justify-between items-center p-4 relative">
           {/* Logo */}
           <motion.div
             className="flex items-center"
@@ -212,9 +211,10 @@ const Hero = () => {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: "easeOut" }}
           >
-            <img src={logo} alt="Logo" className="h-20 w-28" />
+            <img src={logo} alt="Logo" className="h-12 w-20 md:h-16 md:w-24" />
           </motion.div>
 
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               ref={buttonRef}
@@ -243,61 +243,34 @@ const Hero = () => {
             ref={menuRef}
             className={`${
               menuOpen ? "block" : "hidden"
-            } justify-end absolute w-full top-12 left-0 md:static md:flex md:space-x-4 text-gray-800 bg-white md:bg-transparent md:p-0 shadow-lg md:shadow-none rounded-lg`}
+            } absolute top-14 left-0 w-full bg-white shadow-md md:shadow-none md:static md:flex md:space-x-6 md:bg-transparent md:block`}
           >
-            <ul className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0">
-              <li>
-                <Button
-                  onClick={handleScrollToEvent}
-                  className="text-black lg:text-white xl:text-white md:text-white"
-                  variant="link"
-                >
-                  Event Schedule
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={handleScrollToCompanies}
-                  className="text-black lg:text-white xl:text-white md:text-white"
-                  variant="link"
-                >
-                  Participating Companies
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={handleScrollToMap}
-                  className="text-black lg:text-white xl:text-white md:text-white"
-                  variant="link"
-                >
-                  Floor Map
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={handleScrollToGallery}
-                  className="text-black lg:text-white xl:text-white md:text-white"
-                  variant="link"
-                >
-                  Gallery
-                </Button>
-              </li>
-              <li>
-                <Button
-                  onClick={handleScrollToContact}
-                  className="text-black lg:text-white xl:text-white md:text-white"
-                  variant="link"
-                >
-                  Contact Us
-                </Button>
-              </li>
+            <ul className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 text-center">
+              {[
+                { label: "Event Schedule", onClick: handleScrollToEvent },
+                { label: "Participating Companies", onClick: handleScrollToCompanies },
+                { label: "Floor Map", onClick: handleScrollToMap },
+                { label: "Gallery", onClick: handleScrollToGallery },
+                { label: "Contact Us", onClick: handleScrollToContact },
+              ].map((item, index) => (
+                <li key={index}>
+                  <Button
+                    onClick={item.onClick}
+                    className="text-black md:text-white text-sm md:text-lg"
+                    variant="link"
+                  >
+                    {item.label}
+                  </Button>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>
 
+        {/* Hero Content */}
         <div
           id="heroContent"
-          className="flex flex-col items-center justify-center text-center text-white px-6 md:px-12 h-full"
+          className="flex flex-col items-center justify-center text-center text-white px-4 md:px-8 flex-grow gap-y-4"
         >
           <motion.div
             className="flex flex-col items-center"
@@ -306,16 +279,16 @@ const Hero = () => {
             transition={{ duration: 1, ease: "easeOut" }}
           >
             <img
-              className="w-48 h-56 md:w-56 md:h-60 lg:w-64 lg:h-64 object-contain"
+              className="w-40 h-auto max-w-[90%] md:w-52 lg:w-64 object-contain"
               src={uomLogo}
-              alt="Logo of the University of Mauritius"
+              alt="University of Mauritius Logo"
             />
-            <h1 className="text-l lg:text-5xl md:text-2xl text-blue-600 mt-0 sm:text-3xl">
+            <h1 className="text-sm sm:text-lg md:text-2xl lg:text-4xl text-blue-600 mt-2">
               INDUSTRY RECRUITMENT <span className="text-white">2025</span>
             </h1>
-            <h2 className="text-sm lg:text-xl md:text-xl sm:text-xl">
+            <h2 className="text-xs sm:text-sm md:text-lg lg:text-xl">
               5-6 FEBRUARY 2025 -{" "}
-              <span className="text-blue-600 lg:text-xl text-md md:text-xl">
+              <span className="text-blue-600 md:text-lg lg:text-xl">
                 POWA, UNIVERSITY OF MAURITIUS
               </span>
             </h2>
@@ -324,29 +297,29 @@ const Hero = () => {
           </motion.div>
         </div>
 
+        {/* About the Event */}
         <motion.div
-          className="p-2"
+          className="p-4 text-center md:text-left"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 1, ease: "easeOut" }}
         >
-          <h1 className="text-xl text-blue-500 font-extrabold mb-2 lg:mt-22 md:mt-18 mt-12">
+          <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl text-blue-500 font-bold mb-2">
             ABOUT THE EVENT
           </h1>
-          <h2 className="lg:w-3/5 md:w-4/5 text-sm lg:text-base xl:text-base 2xl:text-xl pl-0 text-blue-600">
-            The career fair offers students a chance to explore career paths,
-            connect with employers, and learn about various industries. It's a
-            platform for networking, seeking internships or jobs, and understanding
-            the job market. The event features a diverse range of companies eager to
-            discuss career prospects. Attending is a proactive step toward a
-            successful professional future.
-          </h2>
+          <p className="max-w-3xl mx-auto md:mx-0 text-xs sm:text-sm md:text-md lg:text-lg text-blue-600 leading-relaxed">
+            The career fair offers students a chance to explore career paths, connect
+            with employers, and learn about various industries. It's a platform for
+            networking, seeking internships or jobs, and understanding the job market.
+            The event features a diverse range of companies eager to discuss career
+            prospects. Attending is a proactive step toward a successful professional
+            future.
+          </p>
         </motion.div>
       </div>
     </div>
   );
 };
-
 
 const fadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -430,7 +403,6 @@ const EventSchedule = () => {
     </div>
   );
 };
-
 
 
 
