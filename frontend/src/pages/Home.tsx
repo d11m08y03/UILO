@@ -22,7 +22,7 @@ import { motion, useInView } from "framer-motion";
 import PlayButton from "@/components/PlayBtn";
 import uomLogo from "../assets/images/uomLogo.png";
 import backgroundImg from "../assets/images/hero-background.png";
-
+import Loader from "@/components/Loader";
 import {
   Carousel,
   CarouselContent,
@@ -293,7 +293,7 @@ const Hero = () => {
             {/* Date & Location */}
             <h2 className="text-sm sm:text-xl md:text-xl lg:text-2xl font-semibold">
               5-6 FEBRUARY 2025 -{" "}
-              <span className="text-blue-900 md:text-lg lg:text-xl">
+              <span className="text-blue-900 text-sm sm:text-xl md:text-xl lg:text-2xl">
                 POWA, UNIVERSITY OF MAURITIUS
               </span>
             </h2>
@@ -341,7 +341,7 @@ const EventSchedule = () => {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <div id="eventSchedule" ref={ref} className="lg:p-2 xl:p-2">
+    <div id="eventSchedule" ref={ref} className="p-2 bg-[#dcf5fd] ">
       {/* Title Section - Animates When in View */}
       <motion.div
         className="flex items-center justify-center space-x-2 mb-5"
@@ -469,7 +469,7 @@ const ParticipatingCompanies = () => {
           >
             <CompanyCard
               name={company.name}
-              tier={company.tier}  // Correctly passing tier
+              tier={company.tier}  
             />
           </motion.div>
         ))}
@@ -490,7 +490,7 @@ const Floormap = () => {
       <motion.div
         id="floor-map"
         ref={ref}
-        className="border rounded-lg p-4 bg-[#dcf5fd] lg:pl-6 xl:pl-8"
+        className=" p-2 bg-[#dcf5fd] "
         initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 1, ease: "easeOut" }}
@@ -564,7 +564,7 @@ const Gallery = () => {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.2, duration: 0.8 }}
       >
-        <p className="text-xl lg:text-3xl xl:text-3xl font-bold">Gallery</p>
+        <p className="text-3xl font-bold">Gallery</p>
         <motion.div
           animate={isInView ? { rotate: [0, 10, -10, 0] } : {}}
           transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
@@ -618,7 +618,7 @@ const Contact: React.FC = () => {
     <motion.div
       ref={ref}
       id="contact"
-      className="bg-[#dcf5fd] border border-white p-6 rounded-lg"
+      className="bg-[#dcf5fd] p-2 rounded-lg"
       initial={{ opacity: 0, y: 30 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 1, ease: "easeOut" }}
@@ -629,7 +629,7 @@ const Contact: React.FC = () => {
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.2, duration: 0.8 }}
       >
-        <p className="text-xl lg:text-3xl xl:text-3xl font-bold">Contact Us</p>
+        <p className="text-3xl font-bold">Contact Us</p>
         <motion.div
           animate={isInView ? { rotate: [0, 10, -10, 0] } : {}}
           transition={{ duration: 1.5, ease: "easeInOut", repeat: Infinity }}
@@ -733,22 +733,31 @@ const Footer=()=>{
 }
 
 
-const Home = () => {
+const Home: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulating a delay (e.g., fetching data)
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="overflow-hidden">
-      <Hero />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <EventSchedule />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <ParticipatingCompanies />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <Floormap />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <Gallery />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <Contact />
-      {/* <Separator className="mt-8 mb-8 bg-[#dcf5fd]" /> */}
-      <Footer />
+      {isLoading ? <Loader /> : (
+        <>
+          <Hero />
+          <EventSchedule />
+          <ParticipatingCompanies />
+          <Floormap />
+          <Gallery />
+          <Contact />
+          <Footer />
+        </>
+      )}
     </div>
   );
 };
