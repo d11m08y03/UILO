@@ -213,7 +213,7 @@ class _HomeState extends State<Home> {
       };
 
       // Delay the bottom sheet to ensure everything is settled before showing it
-      Future.delayed(Duration(milliseconds: 200), () {
+      Future.delayed(const Duration(milliseconds: 200), () {
         showModalBottomSheet(
           context: context,
           isScrollControlled: true,
