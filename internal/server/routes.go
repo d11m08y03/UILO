@@ -65,6 +65,54 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 			ctx.Status(http.StatusOK)
 		})
+
+		api.GET("/present/:id", func(ctx *gin.Context) {
+			companyID := ctx.Param("id")
+
+			err := s.db.ToggleCompanyBoolean("Present", companyID)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to mark company as present",
+					"details": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.Status(http.StatusOK)
+		})
+
+		api.GET("/water/:id", func(ctx *gin.Context) {
+			companyID := ctx.Param("id")
+
+			err := s.db.ToggleCompanyBoolean("Water", companyID)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to mark company field water",
+					"details": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.Status(http.StatusOK)
+		})
+
+		api.GET("/food/:id", func(ctx *gin.Context) {
+			companyID := ctx.Param("id")
+
+			err := s.db.ToggleCompanyBoolean("Food", companyID)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to mark company field food",
+					"details": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.Status(http.StatusOK)
+		})
 	}
 
 	return r

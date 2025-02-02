@@ -1,6 +1,7 @@
 package database
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"sort"
@@ -16,7 +17,7 @@ func (s *service) getCompaniesBeforeShuffle() ([]models.Company, error) {
 	rows, err := s.db.Query(query)
 	if err != nil {
 		log.Println(err.Error())
-		return nil, fmt.Errorf("failed to query companies: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -29,7 +30,7 @@ func (s *service) getCompaniesBeforeShuffle() ([]models.Company, error) {
 		err := rows.Scan(&company.ID, &company.Name, &company.Category, &company.Timestamp)
 		if err != nil {
 			log.Println(err.Error())
-			return nil, fmt.Errorf("failed to query company: %w", err)
+			return nil, err
 		}
 
 		companies = append(companies, company)
@@ -37,7 +38,7 @@ func (s *service) getCompaniesBeforeShuffle() ([]models.Company, error) {
 
 	if err = rows.Err(); err != nil {
 		log.Println(err.Error())
-		return nil, fmt.Errorf("error after iterating rows: %w", err)
+		return nil, err
 	}
 
 	return companies, nil
@@ -53,7 +54,7 @@ func (s *service) GetCompanies() ([]models.Company, error) {
 	rows, err := s.db.Query(query)
 	if err != nil {
 		log.Println(err.Error())
-		return nil, fmt.Errorf("failed to query companies: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -65,15 +66,14 @@ func (s *service) GetCompanies() ([]models.Company, error) {
 		err := rows.Scan(&company.ID, &company.Name, &company.Category, &company.Timestamp, &company.Stand)
 		if err != nil {
 			log.Println(err.Error())
-			return nil, fmt.Errorf("failed to query company: %w", err)
+			return nil, err
 		}
 
 		companies = append(companies, company)
 	}
 
 	if err = rows.Err(); err != nil {
-		log.Println(err.Error())
-		return nil, fmt.Errorf("error after iterating rows: %w", err)
+		return nil, err
 	}
 
 	return companies, nil
@@ -91,7 +91,7 @@ func (s *service) assignStand(companyID int, category string) error {
 	_, err := s.db.Exec(query)
 	if err != nil {
 		log.Println(err.Error())
-		return fmt.Errorf("failed to execute update: %w", err)
+		return err
 	}
 
 	return nil
@@ -102,14 +102,13 @@ func (s *service) bitesTheDust() error {
 
 	_, err := s.db.Exec(query)
 	if err != nil {
-		log.Println(err.Error())
-		return fmt.Errorf("failed to update TblStands: %w", err)
+		return err
 	}
 
 	return nil
 }
 
-func (s *service) ShuffleCompanies() (error) {
+func (s *service) ShuffleCompanies() error {
 	err := s.bitesTheDust()
 	if err != nil {
 		return err
@@ -128,7 +127,7 @@ func (s *service) ShuffleCompanies() (error) {
 	for _, company := range companies {
 		err := s.assignStand(company.ID, company.Category)
 		if err != nil {
-			return fmt.Errorf("error shuffling rows: %w", err)
+			return err
 		}
 	}
 
@@ -138,4 +137,58 @@ func (s *service) ShuffleCompanies() (error) {
 	}
 
 	return nil
+}
+
+func (s *service) ToggleCompanyBoolean(key string, id string) error {
+	allowedKeys := []string{"Present", "Water", "Food"}
+
+	notInList := func(s string) bool {
+		for _, item := range allowedKeys {
+			if s == item {
+				return false
+			}
+		}
+		return true
+	}
+
+	if notInList(key) {
+		return fmt.Errorf("Invalid key")
+	}
+
+	present, err := s.verifyBool(key, id)
+	if err != nil {
+		return fmt.Errorf("failed to mark company field %s: %w", key, err)
+	}
+
+	if present {
+		return fmt.Errorf("field already marked as true")
+	}
+
+	query := fmt.Sprintf(
+		"UPDATE TblCompanies SET %s = 1 WHERE ID = %s;", key, id,
+	)
+
+	_, err = s.db.Exec(query)
+	if err != nil {
+		return fmt.Errorf("failed to mark company field %s: %w", key, err)
+	}
+
+	return nil
+}
+
+func (s *service) verifyBool(key string, id string) (bool, error) {
+	query := fmt.Sprintf("SELECT %s FROM TblCompanies WHERE ID = %s", key, id)
+
+	var val bool
+	err := s.db.QueryRow(query).Scan(&val)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, fmt.Errorf("No rows found")
+		} else {
+			return false, fmt.Errorf("Failed to execute query: %v", err)
+		}
+	}
+
+	return val, nil
 }
