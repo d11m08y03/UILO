@@ -157,8 +157,20 @@ class _HomeState extends State<Home> {
     );
   }
 
+	void _markCompanyFieldAsPresent(String key, String companyID) async {
+    String apiUrl =
+        '${Environment.serverUrl}${Environment.port}/api/$key/$companyID';
+
+    try {
+      final _ = await http.get(Uri.parse(apiUrl));
+    } catch (e) {
+      print(e.toString());
+    }
+	}
+
   Future<Map<String, String>> _getCompanyInfo(String companyID) async {
-    const String apiUrl = '${Environment.serverUrl}:${Environment.port}';
+    String apiUrl =
+        '${Environment.serverUrl}${Environment.port}/api/company/$companyID';
 
     Map<String, String> allah = {
       'companyName': "",
@@ -173,13 +185,13 @@ class _HomeState extends State<Home> {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
-        allah["companyName"] = jsonResponse['name'];
-        allah["isPresent"] = jsonResponse['present'];
-        allah["hasReceivedWater"] = jsonResponse['water'];
-        allah["hasReceivedLunch"] = jsonResponse['food'];
+        allah["companyName"] = jsonResponse['name'].toString();
+        allah["isPresent"] = jsonResponse['present'].toString();
+        allah["hasReceivedWater"] = jsonResponse['water'].toString();
+        allah["hasReceivedLunch"] = jsonResponse['food'].toString();
       }
     } catch (e) {
-      print("KK Faner");
+      print(e.toString());
     }
 
     return allah;
@@ -187,111 +199,114 @@ class _HomeState extends State<Home> {
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
+    controller.scannedDataStream.listen((scanData) async {
       Navigator.pop(context); // Close the scanner modal
 
+      // Fetch company info
+      Map<String, String> trust = await _getCompanyInfo(scanData.code ?? "");
+
       Map<String, dynamic> scanDataMap = {
-        'companyName': scanData.code,
-        'isPresent': true, //
-        'hasReceivedWater': false,
-        'hasReceivedLunch': false,
+        'companyName': trust["companyName"],
+        'isPresent': trust["isPresent"] == "true" ? true : false,
+        'hasReceivedWater': trust["hasReceivedWater"] == "true" ? true : false,
+        'hasReceivedLunch': trust["hasReceivedLunch"] == "true" ? true : false,
       };
 
-      scanDataMap = _getCompanyInfo(scanData.code ?? "") as Map<String, dynamic>;
-
-      //    Map<String, dynamic> scanDataMap = {
-      //   "companyName": companyName,
-      //   "isPresent": isPresent,
-      //   "hasReceivedWater": hasReceivedWater,
-      //   "hasReceivedLunch": hasReceivedLunch,
-      // };
-
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        backgroundColor: Colors.white,
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text(
-                      "${scanDataMap['companyName']}",
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 20),
-                    CheckboxListTile(
-                      title: const Text("Company is Present?"),
-                      value: scanDataMap['isPresent'],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          scanDataMap['isPresent'] = value!;
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      title: const Text("Company has Received water?"),
-                      value: scanDataMap['hasReceivedWater'],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          scanDataMap['hasReceivedWater'] = value!;
-                        });
-                      },
-                    ),
-                    CheckboxListTile(
-                      title: const Text("Company has received lunch voucher?"),
-                      value: scanDataMap['hasReceivedLunch'],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          scanDataMap['hasReceivedLunch'] = value!;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        print("Company Name: ${scanDataMap['companyName']}");
-                        print("Is Present: ${scanDataMap['isPresent']}");
-                        print(
-                            "Has Received Water: ${scanDataMap['hasReceivedWater']}");
-                        print(
-                            "Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
-
-                        Navigator.pop(context); // Close the modal
-                      },
-                      icon: const Icon(Icons.check, color: Colors.white),
-                      label: const Text(
-                        "Confirm",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+      // Delay the bottom sheet to ensure everything is settled before showing it
+      Future.delayed(Duration(milliseconds: 200), () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          backgroundColor: Colors.white,
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 10),
+                      Text(
+                        "${scanDataMap['companyName']}",
+                        style: const TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.w600),
                       ),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                      const SizedBox(height: 20),
+                      CheckboxListTile(
+                        title: const Text("Company is Present?"),
+                        value: scanDataMap['isPresent'],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            scanDataMap['isPresent'] = value!;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        title: const Text("Company has Received water?"),
+                        value: scanDataMap['hasReceivedWater'],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            scanDataMap['hasReceivedWater'] = value!;
+                          });
+                        },
+                      ),
+                      CheckboxListTile(
+                        title:
+                            const Text("Company has received lunch voucher?"),
+                        value: scanDataMap['hasReceivedLunch'],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            scanDataMap['hasReceivedLunch'] = value!;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton.icon(
+                        onPressed: () {
+													if (scanDataMap['isPresent']) {
+														_markCompanyFieldAsPresent("present", scanData.code ?? "");
+													}
+
+													if (scanDataMap['hasReceivedWater']) {
+														_markCompanyFieldAsPresent("water", scanData.code ?? "");
+													}
+
+													if (scanDataMap['hasReceivedLunch']) {
+														_markCompanyFieldAsPresent("food", scanData.code ?? "");
+													}
+
+                          Navigator.pop(context); // Close the modal
+                        },
+                        icon: const Icon(Icons.check, color: Colors.white),
+                        label: const Text(
+                          "Confirm",
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 12, horizontal: 20),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 20),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      );
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      });
     });
   }
 
