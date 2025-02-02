@@ -12,13 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'EOY 2024',
+      title: 'UILO IR 2025',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 218, 218, 218)),
         useMaterial3: true,
       ),
-      home: const SplashScreen(), // Corrected home placement
+      home: const SplashScreen(), 
     );
   }
 }
