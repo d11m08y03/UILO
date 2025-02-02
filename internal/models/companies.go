@@ -17,3 +17,10 @@ type Company struct {
 	Timestamp time.Time `json:"timestamp"`
 	Stand     string    `json:"stand"`
 }
+
+type CompanyFields struct {
+	Name    string `json:"name"`
+	Present bool   `json:"present"`
+	Food    bool   `json:"food"`
+	Water   bool   `json:"water"`
+}

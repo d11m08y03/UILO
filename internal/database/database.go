@@ -18,6 +18,7 @@ type Service interface {
 	Health() map[string]string
 	Close() error
 	GetCompanies() ([]models.Company, error)
+	GetCompanyBooleans(id string) (models.CompanyFields, error)
 	ShuffleCompanies() error
 	ToggleCompanyBoolean(key string, id string) error
 }

@@ -66,6 +66,22 @@ func (s *Server) RegisterRoutes() http.Handler {
 			ctx.Status(http.StatusOK)
 		})
 
+		api.GET("/company/:id", func(ctx *gin.Context) {
+			companyID := ctx.Param("id")
+
+			details, err := s.db.GetCompanyBooleans(companyID)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error":   "Failed to retrieve company details",
+					"details": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.JSON(http.StatusOK, details)
+		})
+
 		api.GET("/present/:id", func(ctx *gin.Context) {
 			companyID := ctx.Param("id")
 

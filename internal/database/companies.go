@@ -192,3 +192,20 @@ func (s *service) verifyBool(key string, id string) (bool, error) {
 
 	return val, nil
 }
+
+func (s *service) GetCompanyBooleans(id string) (models.CompanyFields, error) {
+	var companyFields models.CompanyFields
+
+	query := fmt.Sprintf("SELECT Name, Present, Water, Food FROM TblCompanies WHERE ID = %s", id)
+
+	err := s.db.QueryRow(query).Scan(&companyFields.Name, &companyFields.Present, &companyFields.Water, &companyFields.Food)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return companyFields, fmt.Errorf("No rows found")
+		} else {
+			return companyFields, fmt.Errorf("Failed to execute query: %v", err)
+		}
+	}
+
+	return companyFields, nil
+}
