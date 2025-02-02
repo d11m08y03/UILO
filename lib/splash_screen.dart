@@ -1,6 +1,8 @@
-import 'package:eoy_frontend/login_page.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,22 +18,23 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToHome();
   }
 
-  // Navigate to the HomeScreen after 3 seconds
   _navigateToHome() {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Login()),
+        MaterialPageRoute(builder: (context) => const Home()),
       );
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,  // Set background color
+      backgroundColor: Colors.white,  
       body: Center(
-        child: Image.asset('assets/images/LOGO-SU.png'),  // Add your logo
+        child: Image.asset('assets/images/UILO_logo.png', width: screenWidth * 0.7, // 10% of screen width
+      height: screenWidth * 0.7,), 
       ),
     );
   }
