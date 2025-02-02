@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; // Import the QR scanner package
-
+import 'package:http/http.dart';
 class Home extends StatefulWidget {
   const Home({super.key});
-
+  final String postUrl = "";
   @override
   _HomeState createState() => _HomeState();
 }
@@ -151,11 +151,41 @@ class _HomeState extends State<Home> {
     );
   }
 
+  void _getCompanyInfo(id) async{
+    final url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
+  
+  try {
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      // Parse the JSON response
+      final Map<String, dynamic> data = jsonDecode(response.body);
+
+      // Extract specific fields
+      final userId = data['userId'];
+      final id = data['id'];
+      final title = data['title'];
+      final body = data['body'];
+
+      print('User ID: $userId');
+      print('ID: $id');
+      print('Title: $title');
+      print('Body: $body');
+    } else {
+      print('Failed to load data. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('An error occurred: $e');
+  }
+}
+  }
+
  
 void _onQRViewCreated(QRViewController controller) {
   this.controller = controller;
   controller.scannedDataStream.listen((scanData) {
     Navigator.pop(context); // Close the scanner modal
+    
     
     Map<String, dynamic> scanDataMap = {
       'companyName': scanData.code, 
@@ -163,6 +193,16 @@ void _onQRViewCreated(QRViewController controller) {
       'hasReceivedWater': false, 
       'hasReceivedLunch': false, 
     };
+
+
+
+
+    //    Map<String, dynamic> scanDataMap = {
+    //   "companyName": companyName,
+    //   "isPresent": isPresent,
+    //   "hasReceivedWater": hasReceivedWater,
+    //   "hasReceivedLunch": hasReceivedLunch,
+    // };
 
     showModalBottomSheet(
       context: context,
