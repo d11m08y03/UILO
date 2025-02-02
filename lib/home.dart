@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:eoy_frontend/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; // Import the QR scanner package
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+
 class Home extends StatefulWidget {
   const Home({super.key});
   final String postUrl = "";
@@ -57,7 +61,7 @@ class _HomeState extends State<Home> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  "assets/images/qr.jpg", 
+                  "assets/images/qr.jpg",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -85,7 +89,8 @@ class _HomeState extends State<Home> {
             TextButton.icon(
               onPressed: () => _showHelpModal(context),
               icon: const Icon(Icons.help_outline, color: Colors.blue),
-              label: const Text("Need Help?", style: TextStyle(color: Colors.blue)),
+              label: const Text("Need Help?",
+                  style: TextStyle(color: Colors.blue)),
             ),
             const SizedBox(height: 20),
           ],
@@ -94,7 +99,6 @@ class _HomeState extends State<Home> {
     );
   }
 
- 
   void _openQRScanner(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -113,12 +117,10 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-           
               const SizedBox(height: 10),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: screenWidth * 0.95,
-               
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: QRView(
@@ -130,17 +132,21 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context), 
+                onPressed: () => Navigator.pop(context),
                 label: const Text(
                   "Return to Home",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color:Colors.white),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
               ),
               const SizedBox(height: 20),
@@ -151,146 +157,144 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _getCompanyInfo(id) async{
-    final url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
-  
-  try {
-    final response = await http.get(url);
+  Future<Map<String, String>> _getCompanyInfo(String companyID) async {
+    const String apiUrl = '${Environment.serverUrl}:${Environment.port}';
 
-    if (response.statusCode == 200) {
-      // Parse the JSON response
-      final Map<String, dynamic> data = jsonDecode(response.body);
-
-      // Extract specific fields
-      final userId = data['userId'];
-      final id = data['id'];
-      final title = data['title'];
-      final body = data['body'];
-
-      print('User ID: $userId');
-      print('ID: $id');
-      print('Title: $title');
-      print('Body: $body');
-    } else {
-      print('Failed to load data. Status code: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('An error occurred: $e');
-  }
-}
-  }
-
- 
-void _onQRViewCreated(QRViewController controller) {
-  this.controller = controller;
-  controller.scannedDataStream.listen((scanData) {
-    Navigator.pop(context); // Close the scanner modal
-    
-    
-    Map<String, dynamic> scanDataMap = {
-      'companyName': scanData.code, 
-      'isPresent': true, // 
-      'hasReceivedWater': false, 
-      'hasReceivedLunch': false, 
+    Map<String, String> allah = {
+      'companyName': "",
+      'isPresent': "",
+      'hasReceivedWater': "",
+      'hasReceivedLunch': "",
     };
 
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
 
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
 
+        allah["companyName"] = jsonResponse['name'];
+        allah["isPresent"] = jsonResponse['present'];
+        allah["hasReceivedWater"] = jsonResponse['water'];
+        allah["hasReceivedLunch"] = jsonResponse['food'];
+      }
+    } catch (e) {
+      print("KK Faner");
+    }
 
-    //    Map<String, dynamic> scanDataMap = {
-    //   "companyName": companyName,
-    //   "isPresent": isPresent,
-    //   "hasReceivedWater": hasReceivedWater,
-    //   "hasReceivedLunch": hasReceivedLunch,
-    // };
+    return allah;
+  }
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      backgroundColor: Colors.white,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    "${scanDataMap['companyName']}",
-                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 20),
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      Navigator.pop(context); // Close the scanner modal
 
-                  CheckboxListTile(
-                    title: const Text("Company is Present?"),
-                    value: scanDataMap['isPresent'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['isPresent'] = value!;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Company has Received water?"),
-                    value: scanDataMap['hasReceivedWater'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['hasReceivedWater'] = value!;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Company has received lunch voucher?"),
-                    value: scanDataMap['hasReceivedLunch'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['hasReceivedLunch'] = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
+      Map<String, dynamic> scanDataMap = {
+        'companyName': scanData.code,
+        'isPresent': true, //
+        'hasReceivedWater': false,
+        'hasReceivedLunch': false,
+      };
 
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      print("Company Name: ${scanDataMap['companyName']}");
-                      print("Is Present: ${scanDataMap['isPresent']}");
-                      print("Has Received Water: ${scanDataMap['hasReceivedWater']}");
-                      print("Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
+      scanDataMap = _getCompanyInfo(scanData.code ?? "") as Map<String, dynamic>;
 
-                      Navigator.pop(context); // Close the modal
-                    },
-                    icon: const Icon(Icons.check, color: Colors.white),
-                    label: const Text(
-                      "Confirm",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+      //    Map<String, dynamic> scanDataMap = {
+      //   "companyName": companyName,
+      //   "isPresent": isPresent,
+      //   "hasReceivedWater": hasReceivedWater,
+      //   "hasReceivedLunch": hasReceivedLunch,
+      // };
+
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      "${scanDataMap['companyName']}",
+                      style: const TextStyle(
+                          fontSize: 25, fontWeight: FontWeight.w600),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    const SizedBox(height: 20),
+                    CheckboxListTile(
+                      title: const Text("Company is Present?"),
+                      value: scanDataMap['isPresent'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['isPresent'] = value!;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: const Text("Company has Received water?"),
+                      value: scanDataMap['hasReceivedWater'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['hasReceivedWater'] = value!;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: const Text("Company has received lunch voucher?"),
+                      value: scanDataMap['hasReceivedLunch'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['hasReceivedLunch'] = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        print("Company Name: ${scanDataMap['companyName']}");
+                        print("Is Present: ${scanDataMap['isPresent']}");
+                        print(
+                            "Has Received Water: ${scanDataMap['hasReceivedWater']}");
+                        print(
+                            "Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
+
+                        Navigator.pop(context); // Close the modal
+                      },
+                      icon: const Icon(Icons.check, color: Colors.white),
+                      label: const Text(
+                        "Confirm",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  });
-}
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    });
+  }
 
-
-
- 
   void _showHelpModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -331,14 +335,18 @@ void _onQRViewCreated(QRViewController controller) {
                 icon: const Icon(Icons.close, color: Colors.white),
                 label: const Text(
                   "Close",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
               ),
               const SizedBox(height: 10),

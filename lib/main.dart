@@ -1,4 +1,3 @@
-
 import 'package:eoy_frontend/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -15,10 +14,11 @@ class MyApp extends StatelessWidget {
       title: 'UILO IR 2025',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 218, 218, 218)),
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: const Color.fromARGB(255, 218, 218, 218)),
         useMaterial3: true,
       ),
-      home: const SplashScreen(), 
+      home: const SplashScreen(),
     );
   }
 }
