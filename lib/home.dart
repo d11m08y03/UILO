@@ -183,7 +183,7 @@ void _onQRViewCreated(QRViewController controller) {
                   const SizedBox(height: 10),
                   Text(
                     "${scanDataMap['companyName']}",
-                    style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 20),
 
@@ -206,7 +206,7 @@ void _onQRViewCreated(QRViewController controller) {
                     },
                   ),
                   CheckboxListTile(
-                    title: const Text("Company has received lunch?"),
+                    title: const Text("Company has received lunch voucher?"),
                     value: scanDataMap['hasReceivedLunch'],
                     onChanged: (bool? value) {
                       setState(() {
