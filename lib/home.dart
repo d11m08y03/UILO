@@ -1,5 +1,8 @@
+import 'package:eoy_frontend/environment.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; 
+import 'dart:convert';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -58,7 +61,7 @@ class _HomeState extends State<Home> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
                 child: Image.asset(
-                  "assets/images/qr.jpg", 
+                  "assets/images/qr.jpg",
                   fit: BoxFit.cover,
                 ),
               ),
@@ -86,7 +89,8 @@ class _HomeState extends State<Home> {
             TextButton.icon(
               onPressed: () => _showHelpModal(context),
               icon: const Icon(Icons.help_outline, color: Colors.blue),
-              label: const Text("Need Help?", style: TextStyle(color: Colors.blue)),
+              label: const Text("Need Help?",
+                  style: TextStyle(color: Colors.blue)),
             ),
             const SizedBox(height: 20),
           ],
@@ -94,7 +98,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
 
   void _openQRScanner(BuildContext context) {
     if (_isScanning) return; // Prevent multiple scans
@@ -118,7 +121,7 @@ class _HomeState extends State<Home> {
             children: [
               const SizedBox(height: 10),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: screenWidth * 0.95,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
@@ -131,17 +134,21 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context), 
+                onPressed: () => Navigator.pop(context),
                 label: const Text(
                   "Return to Home",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
               ),
               const SizedBox(height: 20),
@@ -152,18 +159,38 @@ class _HomeState extends State<Home> {
     );
   }
 
-  
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      controller.stopCamera(); // Stop the camera after scan
-      Map<String, dynamic> scanDataMap = {
-        'companyName': scanData.code, 
-        'isPresent': true, 
-        'hasReceivedWater': false, 
-        'hasReceivedLunch': false, 
-      };
+    controller.scannedDataStream.listen((scanData) async {
+      // Stop the camera after scan
+      controller.stopCamera();
 
+      String name = "";
+      bool present = false;
+      bool water = false;
+      bool food = false;
+
+      try {
+        var url = Uri.parse(
+          "${Environment.serverUrl}:${Environment.port}/api/company/${scanData.code}",
+        );
+        var response = await http.get(url);
+        var responseData = json.decode(response.body);
+
+        name = responseData["name"];
+        present = responseData["present"];
+        water = responseData["water"];
+        food = responseData["food"];
+      } catch (e) {
+        print(e.toString());
+      }
+
+      Map<String, dynamic> scanDataMap = {
+        'name': name,
+        'present': present,
+        'water': water,
+        'food': food,
+      };
 
       showModalBottomSheet(
         context: context,
@@ -183,60 +210,88 @@ class _HomeState extends State<Home> {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      "${scanDataMap['companyName']}",
-                      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+                      "${scanDataMap['name']}",
+                      style: const TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 20),
-
                     CheckboxListTile(
                       title: const Text("Company is Present?"),
-                      value: scanDataMap['isPresent'],
+                      value: scanDataMap['present'],
                       onChanged: (bool? value) {
                         setState(() {
-                          scanDataMap['isPresent'] = value!;
+                          scanDataMap['present'] = value!;
                         });
                       },
                     ),
                     CheckboxListTile(
                       title: const Text("Company has Received water?"),
-                      value: scanDataMap['hasReceivedWater'],
+                      value: scanDataMap['water'],
                       onChanged: (bool? value) {
                         setState(() {
-                          scanDataMap['hasReceivedWater'] = value!;
+                          scanDataMap['water'] = value!;
                         });
                       },
                     ),
                     CheckboxListTile(
                       title: const Text("Company has received lunch voucher?"),
-                      value: scanDataMap['hasReceivedLunch'],
+                      value: scanDataMap['food'],
                       onChanged: (bool? value) {
                         setState(() {
-                          scanDataMap['hasReceivedLunch'] = value!;
+                          scanDataMap['food'] = value!;
                         });
                       },
                     ),
                     const SizedBox(height: 20),
-
                     ElevatedButton.icon(
-                      onPressed: () {
-                        print("Company Name: ${scanDataMap['companyName']}");
-                        print("Is Present: ${scanDataMap['isPresent']}");
-                        print("Has Received Water: ${scanDataMap['hasReceivedWater']}");
-                        print("Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
+                      onPressed: () async {
+                        try {
+                          var presentURL = Uri.parse(
+														"${Environment.serverUrl}:${Environment.port}/api/present/${scanData.code}",
+                          );
+
+                          var waterURL = Uri.parse(
+														"${Environment.serverUrl}:${Environment.port}/api/water/${scanData.code}",
+                          );
+
+                          var foodURL = Uri.parse(
+														"${Environment.serverUrl}:${Environment.port}/api/food/${scanData.code}",
+                          );
+
+                          if (scanDataMap['present']) {
+                            await http.get(presentURL);
+                          }
+
+                          if (scanDataMap['water']) {
+                            await http.get(waterURL);
+                          }
+
+                          if (scanDataMap['food']) {
+                            await http.get(foodURL);
+                          }
+                        } catch (e) {
+                          print(e.toString());
+                        }
 
                         Navigator.pop(context); // Close the result modal
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
                         "Confirm",
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 20),
                       ),
                     ),
                   ],
@@ -252,7 +307,6 @@ class _HomeState extends State<Home> {
       });
     });
   }
-
 
   void _showHelpModal(BuildContext context) {
     showModalBottomSheet(
@@ -294,14 +348,18 @@ class _HomeState extends State<Home> {
                 icon: const Icon(Icons.close, color: Colors.white),
                 label: const Text(
                   "Close",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
               ),
               const SizedBox(height: 10),
@@ -314,7 +372,6 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
   }
 }
