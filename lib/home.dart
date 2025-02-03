@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; // Import the QR scanner package
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; 
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,6 +11,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(); // QR Scanner Key
+  bool _isScanning = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +95,11 @@ class _HomeState extends State<Home> {
     );
   }
 
- 
+
   void _openQRScanner(BuildContext context) {
+    if (_isScanning) return; // Prevent multiple scans
+    _isScanning = true;
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -113,12 +117,9 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               const SizedBox(height: 10),
-           
-              const SizedBox(height: 10),
               Expanded(
                 child: Container(
                   width: screenWidth * 0.95,
-               
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: QRView(
@@ -133,7 +134,7 @@ class _HomeState extends State<Home> {
                 onPressed: () => Navigator.pop(context), 
                 label: const Text(
                   "Return to Home",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color:Colors.white),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
@@ -151,106 +152,108 @@ class _HomeState extends State<Home> {
     );
   }
 
- 
-void _onQRViewCreated(QRViewController controller) {
-  this.controller = controller;
-  controller.scannedDataStream.listen((scanData) {
-    Navigator.pop(context); // Close the scanner modal
-    
-    Map<String, dynamic> scanDataMap = {
-      'companyName': scanData.code, 
-      'isPresent': true, // 
-      'hasReceivedWater': false, 
-      'hasReceivedLunch': false, 
-    };
+  
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      controller.stopCamera(); // Stop the camera after scan
+      Map<String, dynamic> scanDataMap = {
+        'companyName': scanData.code, 
+        'isPresent': true, 
+        'hasReceivedWater': false, 
+        'hasReceivedLunch': false, 
+      };
 
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      backgroundColor: Colors.white,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 10),
-                  Text(
-                    "${scanDataMap['companyName']}",
-                    style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(height: 20),
 
-                  CheckboxListTile(
-                    title: const Text("Company is Present?"),
-                    value: scanDataMap['isPresent'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['isPresent'] = value!;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Company has Received water?"),
-                    value: scanDataMap['hasReceivedWater'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['hasReceivedWater'] = value!;
-                      });
-                    },
-                  ),
-                  CheckboxListTile(
-                    title: const Text("Company has received lunch voucher?"),
-                    value: scanDataMap['hasReceivedLunch'],
-                    onChanged: (bool? value) {
-                      setState(() {
-                        scanDataMap['hasReceivedLunch'] = value!;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 20),
-
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      print("Company Name: ${scanDataMap['companyName']}");
-                      print("Is Present: ${scanDataMap['isPresent']}");
-                      print("Has Received Water: ${scanDataMap['hasReceivedWater']}");
-                      print("Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
-
-                      Navigator.pop(context); // Close the modal
-                    },
-                    icon: const Icon(Icons.check, color: Colors.white),
-                    label: const Text(
-                      "Confirm",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text(
+                      "${scanDataMap['companyName']}",
+                      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                     ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+                    const SizedBox(height: 20),
+
+                    CheckboxListTile(
+                      title: const Text("Company is Present?"),
+                      value: scanDataMap['isPresent'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['isPresent'] = value!;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: const Text("Company has Received water?"),
+                      value: scanDataMap['hasReceivedWater'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['hasReceivedWater'] = value!;
+                        });
+                      },
+                    ),
+                    CheckboxListTile(
+                      title: const Text("Company has received lunch voucher?"),
+                      value: scanDataMap['hasReceivedLunch'],
+                      onChanged: (bool? value) {
+                        setState(() {
+                          scanDataMap['hasReceivedLunch'] = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 20),
+
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        print("Company Name: ${scanDataMap['companyName']}");
+                        print("Is Present: ${scanDataMap['isPresent']}");
+                        print("Has Received Water: ${scanDataMap['hasReceivedWater']}");
+                        print("Has Received Lunch: ${scanDataMap['hasReceivedLunch']}");
+
+                        Navigator.pop(context); // Close the result modal
+                      },
+                      icon: const Icon(Icons.check, color: Colors.white),
+                      label: const Text(
+                        "Confirm",
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-  });
-}
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+
+      setState(() {
+        _isScanning = false; // Allow scanning again
+      });
+    });
+  }
 
 
-
- 
   void _showHelpModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
