@@ -115,11 +115,11 @@ class _HomeState extends State<Home> {
         final screenWidth = MediaQuery.of(context).size.width;
 
         return SizedBox(
-          height: screenHeight * 0.85,
+          height: screenHeight * 1,
           width: double.infinity,
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 0.95),
               Expanded(
                 child: SizedBox(
                   width: screenWidth * 0.95,
@@ -134,7 +134,8 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => {Navigator.pop(context),
+                _isScanning= false},
                 label: const Text(
                   "Return to Home",
                   style: TextStyle(
