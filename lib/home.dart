@@ -119,12 +119,11 @@ class _HomeState extends State<Home> {
           width: double.infinity,
           child: Column(
             children: [
-              const SizedBox(height: 0.95),
+              const SizedBox(height: 0.60),
               Expanded(
                 child: SizedBox(
-                  width: screenWidth * 0.95,
+                  width: screenWidth * 1,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
                     child: QRView(
                       key: qrKey,
                       onQRViewCreated: _onQRViewCreated,
@@ -277,6 +276,7 @@ class _HomeState extends State<Home> {
                         }
 
                         Navigator.pop(context); // Close the result modal
+                        Navigator.pushReplacementNamed(context, '/home');
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
