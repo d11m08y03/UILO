@@ -129,6 +129,33 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 			ctx.Status(http.StatusOK)
 		})
+
+		api.GET("/stat", func(ctx *gin.Context) {
+			present, err := s.db.GetNumberOfPresentCompanies()
+
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error": err.Error(),
+				})
+
+				return
+			}
+
+			absent, err := s.db.GetNumberOfAbsentCompanies()
+
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{
+					"error": err.Error(),
+				})
+
+				return
+			}
+
+			ctx.JSON(http.StatusOK, gin.H{
+				"present": present,
+				"absent":  absent,
+			})
+		})
 	}
 
 	return r

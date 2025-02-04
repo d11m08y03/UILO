@@ -209,3 +209,29 @@ func (s *service) GetCompanyBooleans(id string) (models.CompanyFields, error) {
 
 	return companyFields, nil
 }
+
+func (s *service) GetNumberOfPresentCompanies() (int, error) {
+	var present int
+
+	query := "SELECT COUNT(*) FROM TblCompanies WHERE Present = 1"
+
+	err := s.db.QueryRow(query).Scan(&present)
+	if err != nil {
+		return 0, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	return present, nil
+}
+
+func (s *service) GetNumberOfAbsentCompanies() (int, error) {
+	var absent int
+
+	query := "SELECT COUNT(*) FROM TblCompanies WHERE Present = 0"
+
+	err := s.db.QueryRow(query).Scan(&absent)
+	if err != nil {
+		return 0, fmt.Errorf("failed to execute query: %w", err)
+	}
+
+	return absent, nil
+}

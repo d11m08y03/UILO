@@ -21,6 +21,8 @@ type Service interface {
 	GetCompanyBooleans(id string) (models.CompanyFields, error)
 	ShuffleCompanies() error
 	ToggleCompanyBoolean(key string, id string) error
+	GetNumberOfPresentCompanies() (int, error)
+	GetNumberOfAbsentCompanies() (int, error)
 }
 
 type service struct {
