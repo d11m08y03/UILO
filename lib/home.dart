@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:http/http.dart' as http;
+import 'visual_screen.dart'; // import the VisualScreen page
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,30 +16,14 @@ class _HomeState extends State<Home> {
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(); // QR Scanner Key
   bool _isScanning = false;
+  int _selectedIndex = 0; // Track the selected index for the navigation bar
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              "assets/images/UILO_logo.png",
-              height: 30,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              "UILO IR 2025",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
+  
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
         child: Column(
@@ -96,8 +81,10 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+ 
     );
   }
+
 
   void _openQRScanner(BuildContext context) {
     if (_isScanning) return; // Prevent multiple scans
@@ -133,8 +120,7 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => {Navigator.pop(context),
-                _isScanning= false},
+                onPressed: () => {Navigator.pop(context), _isScanning = false},
                 label: const Text(
                   "Return to Home",
                   style: TextStyle(
@@ -249,15 +235,15 @@ class _HomeState extends State<Home> {
                       onPressed: () async {
                         try {
                           var presentURL = Uri.parse(
-														"${Environment.serverUrl}:${Environment.port}/api/present/${scanData.code}",
+                              "${Environment.serverUrl}:${Environment.port}/api/present/${scanData.code}",
                           );
 
                           var waterURL = Uri.parse(
-														"${Environment.serverUrl}:${Environment.port}/api/water/${scanData.code}",
+                              "${Environment.serverUrl}:${Environment.port}/api/water/${scanData.code}",
                           );
 
                           var foodURL = Uri.parse(
-														"${Environment.serverUrl}:${Environment.port}/api/food/${scanData.code}",
+                              "${Environment.serverUrl}:${Environment.port}/api/food/${scanData.code}",
                           );
 
                           if (scanDataMap['present']) {
@@ -276,7 +262,7 @@ class _HomeState extends State<Home> {
                         }
 
                         Navigator.pop(context); // Close the result modal
-                        Navigator.pushReplacementNamed(context, '/home');
+                        Navigator.pushReplacementNamed(context, '/nav');
                       },
                       icon: const Icon(Icons.check, color: Colors.white),
                       label: const Text(
@@ -349,30 +335,19 @@ class _HomeState extends State<Home> {
                 icon: const Icon(Icons.close, color: Colors.white),
                 label: const Text(
                   "Close",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                  style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                 ),
               ),
-              const SizedBox(height: 10),
             ],
           ),
         );
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

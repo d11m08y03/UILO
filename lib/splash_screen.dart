@@ -1,4 +1,5 @@
 
+import 'package:eoy_frontend/bottomNavigationBar.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -22,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const HomeVisualScreenWrapper()),
       );
     });
   }
