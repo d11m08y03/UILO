@@ -1,7 +1,9 @@
+import 'package:eoy_frontend/environment.dart';
 import 'package:eoy_frontend/home.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class VisualScreen extends StatefulWidget {
   const VisualScreen({super.key});
 
@@ -24,9 +26,21 @@ class _VisualScreenState extends State<VisualScreen> {
   Future<void> _fetchDataFromDatabase() async {
     await Future.delayed(const Duration(seconds: 2)); 
 
-    setState(() {
-      presentCount = 33;
-      absentCount = 12;
+     try {
+        var url = Uri.parse(
+          "${Environment.serverUrl}:${Environment.port}/api/stat",
+        );
+        var response = await http.get(url);
+        var responseData = json.decode(response.body);
+        presentCount = responseData["present"];
+        absentCount = responseData["absent"];
+     
+      } catch (e) {
+        print(e.toString());
+      }
+    setState(()  {
+       
+
       isLoading = false;
     });
   }
@@ -66,7 +80,7 @@ class _VisualScreenState extends State<VisualScreen> {
                         sections: [
                           PieChartSectionData(
                             value: presentCount.toDouble(),
-                            title: 'Present',
+                            title: "",
                             color: Colors.green,
                             radius: 60,
                             titleStyle: TextStyle(
@@ -77,7 +91,7 @@ class _VisualScreenState extends State<VisualScreen> {
                           ),
                           PieChartSectionData(
                             value: absentCount.toDouble(),
-                            title: 'Absent',
+                            title: "",
                             color: Colors.red,
                             radius: 60,
                             titleStyle: TextStyle(
