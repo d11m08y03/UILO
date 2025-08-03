@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:eoy_frontend/environment.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart'; // Import the QR scanner package
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
