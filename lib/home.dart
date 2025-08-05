@@ -1,9 +1,35 @@
 import 'dart:convert';
+import 'dart:async';
 
 import 'package:eoy_frontend/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:http/http.dart' as http;
+
+// Simple global state manager
+class AppState {
+  static bool _isAnyModalOpen = false;
+  static bool _isProcessing = false;
+  
+  static bool get isAnyModalOpen => _isAnyModalOpen;
+  static bool get isProcessing => _isProcessing;
+  
+  static void setModalOpen(bool isOpen) {
+    _isAnyModalOpen = isOpen;
+    print("Modal state: $_isAnyModalOpen");
+  }
+  
+  static void setProcessing(bool isProcessing) {
+    _isProcessing = isProcessing;
+    print("Processing state: $_isProcessing");
+  }
+  
+  static void reset() {
+    _isAnyModalOpen = false;
+    _isProcessing = false;
+    print("App state reset");
+  }
+}
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,7 +40,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   QRViewController? controller;
-  final GlobalKey qrKey = GlobalKey(); // QR Scanner Key
+  StreamSubscription? _scanSubscription;
+  bool _isScannerOpen = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +73,7 @@ class _HomeState extends State<Home> {
           children: [
             const SizedBox(height: 60),
             const Text(
-              "Scan the company's QR Code to record attendance, water, and lunch distribution",
+              "Scan the company's QR Code to record attendance and water bottle distribution",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
             ),
@@ -100,6 +127,15 @@ class _HomeState extends State<Home> {
   }
 
   void _openQRScanner(BuildContext context) {
+    // Prevent opening if any modal is open or scanner is already open
+    if (AppState.isAnyModalOpen || _isScannerOpen) {
+      print("Scanner blocked: modal=${AppState.isAnyModalOpen}, scanner=$_isScannerOpen");
+      return;
+    }
+    
+    _isScannerOpen = true;
+    AppState.setModalOpen(true);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -124,7 +160,7 @@ class _HomeState extends State<Home> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
                     child: QRView(
-                      key: qrKey,
+                      key: GlobalKey(),
                       onQRViewCreated: _onQRViewCreated,
                     ),
                   ),
@@ -132,7 +168,10 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _cleanup();
+                  Navigator.pop(context);
+                },
                 label: const Text(
                   "Return to Home",
                   style: TextStyle(
@@ -154,29 +193,60 @@ class _HomeState extends State<Home> {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      _cleanup();
+    });
   }
 
-	void _markCompanyFieldAsPresent(String key, String companyID) async {
+  void _cleanup() {
+    print("Cleaning up");
+    _scanSubscription?.cancel();
+    _scanSubscription = null;
+    controller?.dispose();
+    controller = null;
+    _isScannerOpen = false;
+    AppState.setModalOpen(false);
+    AppState.setProcessing(false);
+  }
+
+  void _cleanupAfterConfirm() {
+    print("Cleaning up after confirm");
+    _scanSubscription?.cancel();
+    _scanSubscription = null;
+    controller?.dispose();
+    controller = null;
+    _isScannerOpen = false;
+    AppState.setModalOpen(false);
+    AppState.setProcessing(false);
+    
+    // Force garbage collection if possible
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  Future<void> _markCompanyFieldAsPresent(String key, String companyID) async {
     String apiUrl =
         '${Environment.serverUrl}${Environment.port}/api/$key/$companyID';
 
     try {
-      final _ = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse(apiUrl));
+      print("Marked $key for company $companyID: ${response.statusCode}");
     } catch (e) {
-      print(e.toString());
+      print("Error marking $key for company $companyID: $e");
     }
-	}
+  }
 
   Future<Map<String, String>> _getCompanyInfo(String companyID) async {
     String apiUrl =
         '${Environment.serverUrl}${Environment.port}/api/company/$companyID';
 
-    Map<String, String> allah = {
+    Map<String, String> result = {
       'companyName': "",
       'isPresent': "",
       'hasReceivedWater': "",
-      'hasReceivedLunch': "",
     };
 
     try {
@@ -185,132 +255,168 @@ class _HomeState extends State<Home> {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
 
-        allah["companyName"] = jsonResponse['name'].toString();
-        allah["isPresent"] = jsonResponse['present'].toString();
-        allah["hasReceivedWater"] = jsonResponse['water'].toString();
-        allah["hasReceivedLunch"] = jsonResponse['food'].toString();
+        result["companyName"] = jsonResponse['name'].toString();
+        result["isPresent"] = jsonResponse['present'].toString();
+        result["hasReceivedWater"] = jsonResponse['water'].toString();
       }
     } catch (e) {
       print(e.toString());
     }
 
-    return allah;
+    return result;
   }
 
   void _onQRViewCreated(QRViewController controller) {
+    print("QR View Created");
     this.controller = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      Navigator.pop(context); // Close the scanner modal
-
-      // Fetch company info
-      Map<String, String> trust = await _getCompanyInfo(scanData.code ?? "");
-
-      Map<String, dynamic> scanDataMap = {
-        'companyName': trust["companyName"],
-        'isPresent': trust["isPresent"] == "true" ? true : false,
-        'hasReceivedWater': trust["hasReceivedWater"] == "true" ? true : false,
-        'hasReceivedLunch': trust["hasReceivedLunch"] == "true" ? true : false,
-      };
-
-      // Delay the bottom sheet to ensure everything is settled before showing it
-      Future.delayed(const Duration(milliseconds: 200), () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-          ),
-          backgroundColor: Colors.white,
-          builder: (context) {
-            return StatefulBuilder(
-              builder: (context, setState) {
-                return Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 10),
-                      Text(
-                        "${scanDataMap['companyName']}",
-                        style: const TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 20),
-                      CheckboxListTile(
-                        title: const Text("Company is Present?"),
-                        value: scanDataMap['isPresent'],
-                        onChanged: (bool? value) {
-                          setState(() {
-                            scanDataMap['isPresent'] = value!;
-                          });
-                        },
-                      ),
-                      CheckboxListTile(
-                        title: const Text("Company has Received water?"),
-                        value: scanDataMap['hasReceivedWater'],
-                        onChanged: (bool? value) {
-                          setState(() {
-                            scanDataMap['hasReceivedWater'] = value!;
-                          });
-                        },
-                      ),
-                      CheckboxListTile(
-                        title:
-                            const Text("Company has received lunch voucher?"),
-                        value: scanDataMap['hasReceivedLunch'],
-                        onChanged: (bool? value) {
-                          setState(() {
-                            scanDataMap['hasReceivedLunch'] = value!;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      ElevatedButton.icon(
-                        onPressed: () {
-													if (scanDataMap['isPresent']) {
-														_markCompanyFieldAsPresent("present", scanData.code ?? "");
-													}
-
-													if (scanDataMap['hasReceivedWater']) {
-														_markCompanyFieldAsPresent("water", scanData.code ?? "");
-													}
-
-													if (scanDataMap['hasReceivedLunch']) {
-														_markCompanyFieldAsPresent("food", scanData.code ?? "");
-													}
-
-                          Navigator.pop(context); // Close the modal
-                        },
-                        icon: const Icon(Icons.check, color: Colors.white),
-                        label: const Text(
-                          "Confirm",
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+    
+    // Cancel any existing subscription
+    _scanSubscription?.cancel();
+    
+    _scanSubscription = controller.scannedDataStream.listen((scanData) async {
+      print("QR Code detected: ${scanData.code}");
+      
+      // Prevent multiple processing
+      if (AppState.isProcessing) {
+        print("Already processing, ignoring scan");
+        return;
+      }
+      
+      // Set processing flag immediately
+      AppState.setProcessing(true);
+      
+      // Cancel subscription immediately to prevent more scans
+      await _scanSubscription?.cancel();
+      _scanSubscription = null;
+      
+              try {
+          // Stop scanner immediately
+          await controller.pauseCamera();
+        
+        // Close scanner modal
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
+        
+        // Add delay to ensure modal is closed
+        await Future.delayed(const Duration(milliseconds: 200));
+        
+        // Get company info
+        Map<String, String> companyInfo = await _getCompanyInfo(scanData.code ?? "");
+        
+        Map<String, dynamic> scanDataMap = {
+          'companyName': companyInfo["companyName"],
+          'isPresent': companyInfo["isPresent"] == "true",
+          'hasReceivedWater': companyInfo["hasReceivedWater"] == "true",
+        };
+        
+        // Show result modal
+        if (mounted && !AppState.isAnyModalOpen) {
+          AppState.setModalOpen(true);
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            backgroundColor: Colors.white,
+            builder: (context) {
+              return StatefulBuilder(
+                builder: (context, setState) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                          "${scanDataMap['companyName']}",
+                          style: const TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.w600),
                         ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+                        const SizedBox(height: 20),
+                        CheckboxListTile(
+                          title: const Text("Company is Present?"),
+                          value: scanDataMap['isPresent'],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              scanDataMap['isPresent'] = value!;
+                            });
+                          },
+                        ),
+                        CheckboxListTile(
+                          title: const Text("Company has Received water bottle?"),
+                          value: scanDataMap['hasReceivedWater'],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              scanDataMap['hasReceivedWater'] = value!;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton.icon(
+                          onPressed: () async {
+                            // Mark company fields as present
+                            if (scanDataMap['isPresent']) {
+                              await _markCompanyFieldAsPresent("present", scanData.code ?? "");
+                            }
+                            if (scanDataMap['hasReceivedWater']) {
+                              await _markCompanyFieldAsPresent("water", scanData.code ?? "");
+                            }
+                            
+                            // Clean up after confirm
+                            _cleanupAfterConfirm();
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.check, color: Colors.white),
+                          label: const Text(
+                            "Confirm",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
                           ),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 20),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueAccent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 20),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          },
-        );
-      });
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ).whenComplete(() {
+            print("Result modal closed, cleaning up");
+            _cleanupAfterConfirm();
+          });
+        } else {
+          // If modal couldn't be shown, reset state
+          AppState.reset();
+        }
+        
+              } catch (e) {
+          print("Error processing QR scan: $e");
+          _cleanupAfterConfirm();
+        }
     });
   }
 
   void _showHelpModal(BuildContext context) {
+    // Prevent opening if any modal is open
+    if (AppState.isAnyModalOpen) {
+      print("Help modal blocked: modal=${AppState.isAnyModalOpen}");
+      return;
+    }
+    
+    AppState.setModalOpen(true);
+    
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -346,7 +452,10 @@ class _HomeState extends State<Home> {
               ),
               const SizedBox(height: 20),
               ElevatedButton.icon(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  _cleanupAfterConfirm();
+                  Navigator.pop(context);
+                },
                 icon: const Icon(Icons.close, color: Colors.white),
                 label: const Text(
                   "Close",
@@ -369,12 +478,16 @@ class _HomeState extends State<Home> {
           ),
         );
       },
-    );
+    ).whenComplete(() {
+      print("Help modal closed, cleaning up");
+      _cleanupAfterConfirm();
+    });
   }
 
   @override
   void dispose() {
-    controller?.dispose();
+    print("Widget disposing, cleaning up");
+    _cleanup();
     super.dispose();
   }
 }
