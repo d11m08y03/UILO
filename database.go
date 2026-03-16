@@ -9,6 +9,15 @@ import (
 
 var db *sql.DB
 
+// Company struct to match the database and Flutter expectations
+type Company struct {
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Present bool   `json:"present"`
+	Water   bool   `json:"water"`
+	Food    bool   `json:"food"`
+}
+
 func init() {
 	var err error
 	db, err = sql.Open("sqlite3", "./uilo.db")
@@ -31,7 +40,6 @@ func init() {
 	}
 
 	// Hardcoded Initial Data
-	// "INSERT OR IGNORE" prevents errors when the app restarts
 	insertDataSQL := `INSERT OR IGNORE INTO company (id, name, present, has_water, has_food) VALUES
 		('BS9', 'Mauritius Finance', 0, 0, 0),
 		('BS11', 'DTOS Ltd', 0, 0, 0),
@@ -68,29 +76,33 @@ func init() {
 	}
 }
 
-// CreateCompany creates a new company with the given name
-func CreateCompany(name string) (int64, error) {
-	res, err := db.Exec("INSERT INTO company (name, present, has_water, has_food) VALUES (?, ?, ?, ?)", name, false, false, false)
+// GetCompanyByID fetches a single company. Necessary for Flutter scanning.
+func GetCompanyByID(id string) (Company, error) {
+	var c Company
+	row := db.QueryRow("SELECT id, name, present, has_water, has_food FROM company WHERE id = ?", id)
+
+	// Scan the database values into the Company struct
+	err := row.Scan(&c.ID, &c.Name, &c.Present, &c.Water, &c.Food)
 	if err != nil {
-		return 0, err
+		return c, err
 	}
-	return res.LastInsertId()
+	return c, nil
 }
 
-// SetPresent sets the present field to true for a given company id
-func SetPresent(id int) error {
+// SetPresent sets the present field to true for a given company string ID
+func SetPresent(id string) error {
 	_, err := db.Exec("UPDATE company SET present = TRUE WHERE id = ?", id)
 	return err
 }
 
-// SetWater sets the has_water field to true for a given company id
-func SetWater(id int) error {
+// SetWater sets the has_water field to true for a given company string ID
+func SetWater(id string) error {
 	_, err := db.Exec("UPDATE company SET has_water = TRUE WHERE id = ?", id)
 	return err
 }
 
-// SetFood sets the has_food field to true for a given company id
-func SetFood(id int) error {
+// SetFood sets the has_food field to true for a given company string ID
+func SetFood(id string) error {
 	_, err := db.Exec("UPDATE company SET has_food = TRUE WHERE id = ?", id)
 	return err
 }

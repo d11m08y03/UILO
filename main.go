@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,47 +9,67 @@ import (
 func main() {
 	router := gin.Default()
 
+	// Using a group to handle the "/api" prefix from your Flutter code
+	api := router.Group("/api")
+	{
+		// 1. GET COMPANY INFO (The "Lookup" after scanning)
+		// Flutter calls: /api/company/:id
+		api.GET("/company/:id", func(c *gin.Context) {
+			id := c.Param("id") // Removed Atoi - id is now a string
+
+			company, err := GetCompanyByID(id)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+
+			// Returning the fields expected by Flutter: name, present, water, food
+			c.JSON(http.StatusOK, gin.H{
+				"name":    company.Name,
+				"present": company.Present,
+				"water":   company.Water, // This maps to database 'has_water'
+				"food":    company.Food,  // This maps to database 'has_food'
+			})
+		})
+
+		// 2. SET PRESENT
+		// Flutter calls: /api/present/:id
+		api.GET("/present/:id", func(c *gin.Context) {
+			id := c.Param("id") // Removed Atoi
+			if err := SetPresent(id); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		})
+
+		// 3. SET WATER
+		// Flutter calls: /api/water/:id
+		api.GET("/water/:id", func(c *gin.Context) {
+			id := c.Param("id") // Removed Atoi
+			if err := SetWater(id); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		})
+
+		// 4. SET FOOD
+		// Flutter calls: /api/food/:id
+		api.GET("/food/:id", func(c *gin.Context) {
+			id := c.Param("id") // Removed Atoi
+			if err := SetFood(id); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		})
+	}
+
+	// Standard health check
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "up"})
 	})
 
-	router.POST("/company", func(c *gin.Context) {
-		name := c.PostForm("name")
-		id, err := CreateCompany(name)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"id": id})
-	})
-
-	router.GET("/company/:id/present", func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		if err := SetPresent(id); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
-
-	router.GET("/company/:id/water", func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		if err := SetWater(id); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
-
-	router.GET("/company/:id/food", func(c *gin.Context) {
-		id, _ := strconv.Atoi(c.Param("id"))
-		if err := SetFood(id); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
-
-	// Listen and serve on 0.0.0.0:8080
 	router.Run(":8080")
 }
