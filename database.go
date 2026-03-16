@@ -17,7 +17,7 @@ func init() {
 	}
 
 	createTableSQL := `CREATE TABLE IF NOT EXISTS company (
-		"id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		"id" TEXT NOT NULL PRIMARY KEY,
 		"name" TEXT,
 		"present" BOOLEAN NOT NULL DEFAULT 0,
 		"has_water" BOOLEAN NOT NULL DEFAULT 0,
@@ -38,7 +38,6 @@ func CreateCompany(name string) (int64, error) {
 	}
 	return res.LastInsertId()
 }
-
 
 // SetPresent sets the present field to true for a given company id
 func SetPresent(id int) error {
