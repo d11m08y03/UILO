@@ -106,3 +106,8 @@ func SetFood(id string) error {
 	_, err := db.Exec("UPDATE company SET has_food = TRUE WHERE id = ?", id)
 	return err
 }
+
+func ResetAllStats() error {
+	_, err := db.Exec("UPDATE company SET present = FALSE, has_water = FALSE, has_food = FALSE")
+	return err
+}

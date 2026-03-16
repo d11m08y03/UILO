@@ -32,6 +32,14 @@ func main() {
 			})
 		})
 
+		api.GET("/reset", func(c *gin.Context) {
+			if err := ResetAllStats(); err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+			c.JSON(http.StatusOK, gin.H{"status": "all records reset successfully"})
+		})
+
 		// 2. SET PRESENT
 		// Flutter calls: /api/present/:id
 		api.GET("/present/:id", func(c *gin.Context) {
