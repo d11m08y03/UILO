@@ -111,3 +111,23 @@ func ResetAllStats() error {
 	_, err := db.Exec("UPDATE company SET present = FALSE, has_water = FALSE, has_food = FALSE")
 	return err
 }
+
+// GetStats calculates the total present and absent companies
+func GetStats() (int, int, error) {
+	var present, total int
+
+	// Count how many are marked as present
+	err := db.QueryRow("SELECT COUNT(*) FROM company WHERE present = 1").Scan(&present)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	// Count total companies to calculate absent (Total - Present)
+	err = db.QueryRow("SELECT COUNT(*) FROM company").Scan(&total)
+	if err != nil {
+		return 0, 0, err
+	}
+
+	absent := total - present
+	return present, absent, nil
+}

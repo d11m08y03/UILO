@@ -32,6 +32,20 @@ func main() {
 			})
 		})
 
+		api.GET("/stat", func(c *gin.Context) {
+			present, absent, err := GetStats()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+
+			// This matches exactly what your Flutter code expects
+			c.JSON(http.StatusOK, gin.H{
+				"present": present,
+				"absent":  absent,
+			})
+		})
+
 		api.GET("/reset", func(c *gin.Context) {
 			if err := ResetAllStats(); err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
