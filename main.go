@@ -10,6 +10,10 @@ import (
 func main() {
 	router := gin.Default()
 
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "up"})
+	})
+
 	router.POST("/company", func(c *gin.Context) {
 		name := c.PostForm("name")
 		id, err := CreateCompany(name)
